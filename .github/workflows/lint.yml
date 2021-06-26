@@ -22,6 +22,6 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           DEFAULT_BRANCH: master
-          DEFAULT_WORKSPACE: ${GITHUB_WORKSPACE}/autotune
+        #  DEFAULT_WORKSPACE: ${GITHUB_WORKSPACE}/autotune
           
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
