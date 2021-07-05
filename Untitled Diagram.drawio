@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-07-05T06:18:14.497Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36" etag="Oe38bXFe8C9q6YDT6T-K" version="14.8.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-07-05T06:21:38.722Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36" etag="6yr71vfhdNqdGieDh1hn" version="14.8.4" type="github">
   <diagram id="_dzs0xd_14PwrRL15zqb" name="Page-1">
     <mxGraphModel dx="1422" dy="741" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -36,6 +36,9 @@
             <mxPoint x="650" y="160" as="sourcePoint" />
             <mxPoint x="770" y="160" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="u0dOnkmtndtANO3sFp8c-14" value="If ROLLING UPDATE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="140" width="110" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
