@@ -20,11 +20,13 @@ jobs:
         with:
           minikube version: 'v1.22.0'
           kubernetes version: 'v1.22.0'
+          start args: --memory 5000 --cpus 2
 
       - name: Start minikube
         run: |
           kubectl cluster-info
-          kubectl get pods -n kube-system  
+          kubectl get pods -n kube-system 
+          minikube ip
           minikube config get memory
           minikube config get cpus
           
