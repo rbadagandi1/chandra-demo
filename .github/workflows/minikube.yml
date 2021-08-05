@@ -20,9 +20,8 @@ jobs:
         with:
           minikube version: 'v1.22.0'
           kubernetes version: 'v1.22.0'
-          start args: '--memory 5500m --cpus 2'
-          driver: 'docker'
-
+          start args: '--cpus 3'
+          
       - name: Minikube info
         run: |
           kubectl get nodes
