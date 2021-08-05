@@ -20,7 +20,7 @@ jobs:
         with:
           minikube version: 'v1.22.0'
           kubernetes version: 'v1.22.0'
-          start args: '--memory 5500 --cpus 2'
+          start args: '--memory 5500m --cpus 2'
           driver: 'docker'
 
       - name: Minikube info
