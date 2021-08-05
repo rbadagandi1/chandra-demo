@@ -20,14 +20,12 @@ jobs:
         with:
           minikube version: 'v1.22.0'
           kubernetes version: 'v1.22.0'
-          start args: '--memory 6000 --cpus 2'
+          start args: '--memory 5000 --cpus 2'
 
       - name: Minikube info
         run: |
           kubectl get nodes
-          minikube ip
-          minikube config get memory
-          minikube config get cpus
+          minikube ip      
           
       - name: Install Prometheus on minikube
         run: |
