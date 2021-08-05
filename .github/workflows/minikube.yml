@@ -24,6 +24,7 @@ jobs:
 
       - name: Minikube info
         run: |
+          kubectl get nodes
           minikube ip
           minikube config get memory
           minikube config get cpus
