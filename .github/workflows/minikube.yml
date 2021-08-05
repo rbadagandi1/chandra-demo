@@ -25,6 +25,8 @@ jobs:
         run: |
           kubectl cluster-info
           kubectl get pods -n kube-system  
+          minikube config get memory
+          minikube config get cpus
           
       - name: Install Prometheus on minikube
         run: |
