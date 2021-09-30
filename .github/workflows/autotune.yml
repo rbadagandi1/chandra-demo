@@ -29,8 +29,8 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: dinogun/autotune
-          ref: update_dockerfile_java17
+          repository: chandrams/autotune
+          ref: jdk17
           path: autotune
 
       - name: Checkout benchmarks
@@ -61,12 +61,13 @@ jobs:
           cd autotune
           ls
           ./deploy.sh -c minikube -i autotune:jdk17
+          kubectl get pods -n monitoring
       - name: Run tests
         run: |
           echo Running Basic API tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:jdk17 --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
-          
+                   
           cd ${GITHUB_WORKSPACE}
           ls
           tar cvf autotune_test_results.tar autotune_test_results
