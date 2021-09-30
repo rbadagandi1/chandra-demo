@@ -29,8 +29,7 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: chandrams/autotune
-          ref: jdk17
+          repository: kruize/autotune
           path: autotune
 
       - name: Checkout benchmarks
