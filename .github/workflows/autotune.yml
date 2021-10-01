@@ -43,7 +43,7 @@ jobs:
           echo Build autotune
           cd autotune
           ls
-          ./build.sh -t autotune:jdk17
+          ./build.sh -t autotune:latest
           docker images | grep autotune     
       - name: Start minikube
         run: |
@@ -59,13 +59,13 @@ jobs:
           echo Deploy autotune 
           cd autotune
           ls
-          ./deploy.sh -c minikube -i autotune:jdk17
+          ./deploy.sh -c minikube -i autotune:latest
           kubectl get pods -n monitoring
       - name: Run tests
         run: |
           echo Running Basic API tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/autotune:jdk17 --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          ./test_autotune.sh -c minikube -i kruize/autotune:latest --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
                    
           cd ${GITHUB_WORKSPACE}
           ls
