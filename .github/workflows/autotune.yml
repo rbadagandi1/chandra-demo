@@ -59,7 +59,8 @@ jobs:
           echo Deploy autotune 
           cd autotune
           ls
-          ./deploy.sh -c minikube -i autotune:latest
+          docker images | grep autotune
+          # ./deploy.sh -c minikube -i autotune:latest
           kubectl get pods -n monitoring
       - name: Run tests
         run: |
