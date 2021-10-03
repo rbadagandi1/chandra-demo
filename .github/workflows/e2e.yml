@@ -66,12 +66,7 @@ jobs:
           echo "***************************************************************"
           cat ./manifests/autotune-operator-deployment.yaml_template
           echo "***************************************************************"          
-          ./deploy.sh -c minikube -i autotune:e2e
-          kubectl get pods -n monitoring
-          autotune_pod=$(kubectl get pod -n monitoring| grep autotune | cut -d " " -f1)
-          echo "autotune pod = ${autotune_pod}"
-          kubectl logs ${autotune_pod} -n monitoring > ${GITHUB_WORKSPACE}/autotune.log	                
-          
+         
       - name: Run tests
         run: |
           echo Running Basic API tests
