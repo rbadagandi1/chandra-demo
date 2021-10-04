@@ -70,15 +70,15 @@ jobs:
           kubectl get pods -n monitoring
           autotune_pod=$(kubectl get pod -n monitoring| grep autotune | cut -d " " -f1)
           echo "autotune pod = ${autotune_pod}"
-          kubectl logs ${autotune_pod} -n monitoring > autotune.log	        
-         
-      - name: Run tests
-        run: |
-          echo Running Basic API tests
-          cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/autotune:java17 --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          kubectl logs ${autotune_pod} -n monitoring > autotune.log	
           
-          cd ${GITHUB_WORKSPACE}
-          ls
-          tar cvf autotune_test_results.tar autotune_test_results
-          ls
+      - name: docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Docker Push
+        run: |
+          docker tag autotune:e2e kruize/autotune:e2e
+          docker push kruize/autotune:e2e
+    
