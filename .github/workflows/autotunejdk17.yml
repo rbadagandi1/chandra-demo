@@ -79,6 +79,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker Push
         run: |
-          docker tag autotune:e2e kruize/autotune:e2e
-          docker push kruize/autotune:e2e
+          docker tag autotune:java17 chandra25ms/autotune:java17
+          docker push chandra25ms/autotune:e2e
     
