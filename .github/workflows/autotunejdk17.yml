@@ -72,7 +72,7 @@ jobs:
           echo "autotune pod = ${autotune_pod}"
           kubectl logs ${autotune_pod} -n monitoring > autotune.log	        
           
-          kubectl exec  ${autotune_pod} -n monitoring -- "/opt/app/jre/bin/java -version"
+          kubectl exec  ${autotune_pod} -n monitoring -- "ls /opt/app/jre/bin"
       - name: Run tests
         run: |
           echo Running Basic API tests
