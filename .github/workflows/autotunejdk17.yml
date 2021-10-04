@@ -29,8 +29,8 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: chandrams/autotune
-          ref: jdk17
+          repository: dinogun/autotune
+          ref: update_dockerfile_java17
           path: autotune
 
       - name: Checkout benchmarks
@@ -44,7 +44,7 @@ jobs:
           echo Build autotune
           cd autotune
           ls
-          ./build.sh -t autotune:java17
+          ./build.sh -t autotune:java17d
           docker images | grep autotune     
       - name: Start minikube
         run: |
@@ -66,7 +66,7 @@ jobs:
           echo "***************************************************************"
           cat ./manifests/autotune-operator-deployment.yaml_template
           echo "***************************************************************"          
-          ./deploy.sh -c minikube -i autotune:java17
+          ./deploy.sh -c minikube -i autotune:java17d
           kubectl get pods -n monitoring
           autotune_pod=$(kubectl get pod -n monitoring| grep autotune | cut -d " " -f1)
           echo "autotune pod = ${autotune_pod}"
@@ -79,6 +79,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker Push
         run: |
-          docker tag autotune:java17 chandra25ms/autotune:java17
-          docker push chandra25ms/autotune:java17
+          docker tag autotune:java17d chandra25ms/autotune:java17d
+          docker push chandra25ms/autotune:java17d
     
