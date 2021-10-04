@@ -80,5 +80,5 @@ jobs:
       - name: Docker Push
         run: |
           docker tag autotune:java17 chandra25ms/autotune:java17
-          docker push chandra25ms/autotune:e2e
+          docker push chandra25ms/autotune:java17
     
