@@ -1,4 +1,4 @@
-name: Test on Pull Request 
+name: Int Test on Pull Request 
 
 # Controls when the action will run. 
 on:
