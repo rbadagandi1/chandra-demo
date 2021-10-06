@@ -1,4 +1,4 @@
-name: Test on Push 
+name: Test exit code
 
 # Controls when the action will run. 
 on:
@@ -63,10 +63,9 @@ jobs:
           sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/autotune-operator-deployment.yaml_template.old > ./manifests/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
           cat ./manifests/autotune-operator-deployment.yaml_template
-          echo "***************************************************************"
-        
+          echo "***************************************************************"        
 
-       - name: Run tests
+      - name: Run tests
         run: |
           echo Running Basic API tests
           cd autotune/tests
