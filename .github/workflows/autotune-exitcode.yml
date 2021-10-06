@@ -49,6 +49,7 @@ jobs:
         run: |
           echo Running Basic API tests
           cd autotune/tests
+          cat test_autotune.sh
           ./test_autotune.sh -c minikube -i kruize/autotune:e2e --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
 
       - name: Archive results
