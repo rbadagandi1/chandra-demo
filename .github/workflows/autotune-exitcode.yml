@@ -58,3 +58,10 @@ jobs:
           ls
           tar cvf autotune_test_results.tar autotune_test_results
           ls
+          
+      - name: Upload results
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_test_results.tar
+           retention-days: 2
