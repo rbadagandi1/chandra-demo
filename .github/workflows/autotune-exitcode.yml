@@ -53,6 +53,7 @@ jobs:
           ./test_autotune.sh -c minikube -i kruize/autotune:e2e --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
 
       - name: Archive results
+        if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
           ls
@@ -60,6 +61,7 @@ jobs:
           ls
           
       - name: Upload results
+        if: always()
         uses: actions/upload-artifact@v2
         with:
            name: autotune-results
