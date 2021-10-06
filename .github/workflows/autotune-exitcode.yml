@@ -24,8 +24,7 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: chandrams/autotune
-          ref: exit_code
+          repository: kruize/autotune
           path: autotune
 
       - name: Checkout benchmarks
