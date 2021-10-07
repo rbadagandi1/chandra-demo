@@ -1,0 +1,111 @@
+name: Int Test on Pull Request 
+
+# Controls when the action will run. 
+on:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'examples/**'
+      - 'extensions/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "build"
+  test_setup:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout autotune
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/autotune
+          ref: master
+          path: autotune
+
+      - name: Checkout benchmarks
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/benchmarks
+          path: benchmarks
+
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - name: Start minikube
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system  
+          
+
+    # This workflow contains a single job called "build"
+    hpo_tests:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest          
+      steps:
+      - name: Run HPO tests
+        run: |
+          echo Running HPO API tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          
+    analyzer_api_tests:
+      # The type of runner that the job will run on
+          
+      - name: Run Analyzer API tests
+        run: |
+          echo Running Analyzer API tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          
+    autotune_yaml_tests:
+      # The type of runner that the job will run on
+          
+      - name: Run Autotune YAML tests
+        run: |
+          echo Running Autotune YAML tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=app_autotune_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          
+    autotune_config_yaml_tests:
+      # The type of runner that the job will run on
+          
+      - name: Run Autotune Config YAML tests
+        run: |
+          echo Running Autotune Config YAML tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks 
+          
+    configmap_tests:
+      # The type of runner that the job will run on
+          
+      - name: Run Autotune Config map tests
+        run: |
+          echo Running Autotune Config map tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+
+     
+ 
+
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf autotune_test_results.tar autotune_test_results
+          ls
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_test_results.tar
+           retention-days: 5
