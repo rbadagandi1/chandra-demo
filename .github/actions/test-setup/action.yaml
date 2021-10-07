@@ -25,7 +25,5 @@ runs:
         kubernetes version: 'v1.19.2'
         
     - name: Start minikube
-      run: kubectl cluster-info
-      shell: bash
       run: kubectl get pods -n kube-system 
       shell: bash
