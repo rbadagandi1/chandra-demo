@@ -13,55 +13,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
-  test_setup:
-    name: Test Setup
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout autotune
-        uses: actions/checkout@v2
-        with:
-          repository: kruize/autotune
-          ref: master
-          path: autotune
-
-      - name: Checkout benchmarks
-        uses: actions/checkout@v2
-        with:
-          repository: kruize/benchmarks
-          path: benchmarks
-
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.0
-        with:
-          minikube version: 'v1.16.0'
-          kubernetes version: 'v1.19.2'
-      - name: Start minikube
-        run: |
-          kubectl cluster-info
-          kubectl get pods -n kube-system  
-          
-
-    # This workflow contains a single job called "build"
+  
   hpo:
     name: HPO Tests    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest          
     steps:
-    - name: Run HPO tests
-      run: |
-        echo Running HPO API tests
-        cd autotune/tests
-        ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v1
+      - name: Autotune Test setup
+        uses: ./.github/actions/test-setup
+      - name: Run HPO tests
+        run: |
+          echo Running HPO API tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
           
   analyzer_api_tests:
     name: Analyzer API Test   
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
-    steps:        
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v1
+      - name: Autotune Test setup
+        uses: ./.github/actions/test-setup
       - name: Run Analyzer API tests
         run: |
           echo Running Analyzer API tests
@@ -72,7 +49,11 @@ jobs:
     name: Autotune YAML Test    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
-    steps:  
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v1
+      - name: Autotune Test setup
+        uses: ./.github/actions/test-setup
       - name: Run Autotune YAML tests
         run: |
           echo Running Autotune YAML tests
@@ -83,7 +64,11 @@ jobs:
     name: Autotune Config YAML Test    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
-    steps:        
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v1
+      - name: Autotune Test setup
+        uses: ./.github/actions/test-setup
       - name: Run Autotune Config YAML tests
         run: |
           echo Running Autotune Config YAML tests
@@ -94,7 +79,11 @@ jobs:
     name: Config map Test    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
-    steps:  
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v1
+      - name: Autotune Test setup
+        uses: ./.github/actions/test-setup  
       # The type of runner that the job will run on
           
       - name: Run Autotune Config map tests
@@ -103,8 +92,6 @@ jobs:
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
-     
- 
 
       - name: Archive results
         if: always()
