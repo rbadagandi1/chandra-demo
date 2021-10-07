@@ -3,7 +3,7 @@ description: 'Setup minikube and clone the git repos required'
 
 runs:
   using: "composite"
- steps:
+  steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout autotune
       uses: actions/checkout@v2
@@ -25,6 +25,7 @@ runs:
         kubernetes version: 'v1.19.2'
         
     - name: Start minikube
-      run: |
-        kubectl cluster-info
-        kubectl get pods -n kube-system 
+      run: kubectl cluster-info
+      shell: bash
+      run: kubectl get pods -n kube-system 
+      shell: bash
