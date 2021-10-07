@@ -7,7 +7,6 @@ runs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     
     - name: Upload results
-        if: always()
         uses: actions/upload-artifact@v2
         with:
            name: autotune-results
