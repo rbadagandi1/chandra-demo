@@ -27,6 +27,8 @@ jobs:
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=basic_api_tests --testcase=listapplications --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
       - name: Upload Test results
         uses: ./.github/actions/upload-results
+        with:
+         archive: "apps.tar"
           
   listapplayers_test:
     runs-on: ubuntu-latest    
@@ -45,6 +47,6 @@ jobs:
       - name: Upload Test results
         uses: ./.github/actions/upload-results   
         with:
-         test_name: "analyzer"
+         archive: "applayers.tar"
           
           
