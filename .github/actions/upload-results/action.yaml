@@ -5,9 +5,10 @@ runs:
   using: "composite"
   steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    
-    - name: Upload results
+    - name: Archive results 
       run: tar cvf autotune_test_results.tar autotune_test_results
+      shell: bash
+    - name: Upload results   
       uses: actions/upload-artifact@v2
       with:
         name: autotune-results
