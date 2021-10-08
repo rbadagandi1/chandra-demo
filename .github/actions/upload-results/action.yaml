@@ -10,5 +10,5 @@ runs:
       uses: actions/upload-artifact@v2
       with:
         name: autotune-results
-        path: ${GITHUB_WORKSPACE}/autotune_test_results
+        path: ./autotune_test_results
         retention-days: 2
