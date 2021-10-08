@@ -1,16 +1,19 @@
 name: 'Upload Test results'
 description: 'Archive and upload test results'
-
+inputs:
+  test_name:
+    description: “Test name”
+    required: true
 runs:
   using: "composite"
   steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Archive results 
-      run: tar cvf autotune_test_results.tar autotune_test_results
+      run: tar cvf ${{test_name}}.tar autotune_test_results
       shell: bash
     - name: Upload results   
       uses: actions/upload-artifact@v2
       with:
         name: autotune-results
-        path: autotune_test_results.tar
+        path: ${{test_name}}.tar
         retention-days: 2
