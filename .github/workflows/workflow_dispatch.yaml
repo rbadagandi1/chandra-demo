@@ -14,7 +14,7 @@ on:
       image: 
         description: 'Autotune Docker image'
         required: false
-        default: 'kruize/autotune:int-test'
+        default: 'autotune:int-test'
       testsuite:
          description: 'Testsuite to be executed'
          required: false
@@ -72,8 +72,8 @@ jobs:
 
       - name: Docker Push
         run: |
-          docker tag  ${{ github.event.inputs.image }} kruize/ ${{ github.event.inputs.image }}
-          docker push kruize/ ${{ github.event.inputs.image }}
+          docker tag  ${{ github.event.inputs.image }} kruize/${{ github.event.inputs.image }}
+          docker push kruize/${{ github.event.inputs.image }}
           
       - name: Run Analyzer API tests
         run: |
