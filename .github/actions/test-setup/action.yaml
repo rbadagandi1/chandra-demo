@@ -1,5 +1,9 @@
 name: 'Autotune Test Setup'
 description: 'Setup minikube and clone the git repos required'
+inputs:
+  branch:
+    description: “Kruize autotune tests branch”
+    required: true
 
 runs:
   using: "composite"
@@ -9,7 +13,7 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: kruize/autotune
-        ref: master
+        ref: ${{inputs.branch}}
         path: autotune
 
     - name: Checkout benchmarks
