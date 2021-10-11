@@ -30,6 +30,8 @@ jobs:
         run: |
           echo Running HPO API tests
           cd autotune/tests
+          ./scripts/hpo/start_hpo_servers.sh -t
+          ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks -t
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
       - name: Upload results
         uses: ./.github/actions/upload-results
