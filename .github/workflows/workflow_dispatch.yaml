@@ -79,7 +79,7 @@ jobs:
         run: |
           echo Running Basic API tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/ ${{ github.event.inputs.image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
       - name: Archive results
         if: always()
         run: |
