@@ -23,7 +23,7 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: chandrams/autotune
+          repository: dinogun/autotune
           ref: integration-channel-RM-EM
           path: autotune
 
