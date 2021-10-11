@@ -24,7 +24,7 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: kruize/autotune
+          repository: dinogun/autotune
           ref: integration-channel-RM-EM
           path: autotune
 
