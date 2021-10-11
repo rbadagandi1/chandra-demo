@@ -15,7 +15,7 @@ on:
         description: 'Autotune Docker image'
         required: false
         default: 'kruize/autotune:int-test'
-       testsuite:
+      testsuite:
          description: 'Testsuite to be executed'
          required: false
          default: 'basic_api_tests'
@@ -31,7 +31,7 @@ jobs:
           echo "image: ${{ github.event.inputs.image }}"
           echo "Testsuite: ${{ github.event.inputs.testsuite }}"
    
-     - name: Checkout autotune
+      - name: Checkout autotune
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.repository }}
