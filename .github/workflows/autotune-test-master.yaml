@@ -24,6 +24,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Autotune Test setup
         uses: ./.github/actions/test-setup
+        with:
+         branch: "master"
       - name: Run HPO tests
         run: |
           echo Running HPO API tests
