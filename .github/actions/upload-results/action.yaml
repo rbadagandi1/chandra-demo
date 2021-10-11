@@ -9,9 +9,11 @@ runs:
   steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Archive results 
+      if: always()
       run: tar cvf ${{inputs.archive}} autotune_test_results
       shell: bash
     - name: Upload results   
+      if: always() 
       uses: actions/upload-artifact@v2
       with:
         name: autotune-results
