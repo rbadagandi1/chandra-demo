@@ -1,4 +1,4 @@
-name: Run Autotune Tests
+name: Run Autotune Tests against autotune master (autotune:test image)
 
 # Controls when the action will run. 
 on:
