@@ -46,6 +46,7 @@ jobs:
   
   hpo:
     name: HPO Tests    
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest          
     steps:
@@ -65,7 +66,8 @@ jobs:
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
      
   analyzer_api_tests:
-    name: Analyzer API Test   
+    name: Analyzer API Test  
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:
@@ -82,6 +84,7 @@ jobs:
           
   autotune_yaml_tests:
     name: Autotune YAML Test    
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:    
@@ -97,7 +100,8 @@ jobs:
      
           
   autotune_config_yaml_tests:
-    name: Autotune Config YAML Test    
+    name: Autotune Config YAML Test 
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:    
@@ -114,7 +118,8 @@ jobs:
         
           
   configmap_tests:
-    name: Config map Test    
+    name: Config map Test  
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:    
@@ -134,6 +139,7 @@ jobs:
         
   autotune_id_tests:
     name: Autotune ID tests    
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:    
@@ -151,7 +157,8 @@ jobs:
 
         
   modify_autotune_config_tests:
-    name: Modify autotune config tests    
+    name: Modify autotune config tests   
+    needs: build
     # The type of runner that the job will run on
     runs-on: ubuntu-latest 
     steps:    
@@ -167,7 +174,7 @@ jobs:
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=modify_autotune_config_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
-       - name: Archive results
+      - name: Archive results
         if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
