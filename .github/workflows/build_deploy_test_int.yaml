@@ -1,4 +1,4 @@
-name: Run Autotune Tests against autotune integration branch (autotune:int-test image)
+name: Build-Test-autotune-integration
 
 # Controls when the action will run. 
 on:
