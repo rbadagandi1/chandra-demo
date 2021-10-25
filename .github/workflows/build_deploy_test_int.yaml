@@ -64,6 +64,23 @@ jobs:
           ./scripts/hpo/start_hpo_servers.sh -t
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks -t
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf hpo.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./hpo.tar
+           retention-days: 2
+
      
   analyzer_api_tests:
     name: Analyzer API Test  
@@ -80,7 +97,22 @@ jobs:
           echo Running Analyzer API tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
-   
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf analyzer_api.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./analyzer_api.tar
+           retention-days: 2
+
           
   autotune_yaml_tests:
     name: Autotune YAML Test    
@@ -97,7 +129,22 @@ jobs:
           echo Running Autotune YAML tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=app_autotune_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
-     
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf autotune_yaml.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_yaml.tar
+           retention-days: 2
+
           
   autotune_config_yaml_tests:
     name: Autotune Config YAML Test 
@@ -114,7 +161,22 @@ jobs:
           echo Running Autotune Config YAML tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks 
-   
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf autotune_config_yaml.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_config_yaml.tar
+           retention-days: 2
+
         
           
   configmap_tests:
@@ -135,6 +197,22 @@ jobs:
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=configmap_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf config_map.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./config_map.tar
+           retention-days: 2
+
   
         
   autotune_id_tests:
@@ -154,6 +232,22 @@ jobs:
           echo Running Autotune ID tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/autotune:int-test --tctype=functional --testsuite=autotune_id_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+      
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf autotune_id.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_id.tar
+           retention-days: 2
 
         
   modify_autotune_config_tests:
@@ -166,7 +260,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Autotune Test setup
         uses: ./.github/actions/test-setup  
-      # The type of runner that the job will run on
+      
           
       - name: Run modify autotune config tests
         run: |
@@ -179,7 +273,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}
           ls
-          tar cvf autotune_test_results.tar autotune_test_results
+          tar cvf modify_autotune.tar autotune_test_results
           ls
           
       - name: Upload results
@@ -187,5 +281,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
            name: autotune-results
-           path: ./autotune_test_results.tar
+           path: ./modify_autotune.tar
            retention-days: 2
