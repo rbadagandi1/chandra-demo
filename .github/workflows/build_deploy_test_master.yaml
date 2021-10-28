@@ -42,7 +42,7 @@ jobs:
       - name: Docker Push
         run: |
           docker tag autotune:int-test kruize/autotune:int-test
-          docker push kruize/autotune:int-test
+          docker push kruize/autotune:test
   
   hpo:
     name: HPO Tests    
