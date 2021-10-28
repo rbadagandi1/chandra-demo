@@ -144,7 +144,6 @@ jobs:
            name: autotune-results
            path: ./autotune_yaml.tar
            retention-days: 2
-
           
   autotune_config_yaml_tests:
     name: Autotune Config YAML Test 
@@ -175,9 +174,7 @@ jobs:
         with:
           name: autotune-results
           path: ./autotune_config_yaml.tar
-          retention-days: 2
-
-        
+          retention-days: 2        
           
   configmap_tests:
     name: Config map Test  
