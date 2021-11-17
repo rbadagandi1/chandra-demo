@@ -80,14 +80,14 @@ jobs:
           #docker tag  ${{ github.event.inputs.operator_image }} chandra25ms/${{ github.event.inputs.operator_image }}
           #docker push chandra25ms/${{ github.event.inputs.operator_image }}
           
-          docker tag  kruize/autotune_operator:0.0.5 chandra25ms/autotune_operator:0.0.5
-          docker push chandra25ms/autotune_operator:0.0.5
+          #docker tag  kruize/autotune_operator:0.0.5 chandra25ms/autotune_operator:0.0.5
+          #docker push chandra25ms/autotune_operator:0.0.5
           
           #docker tag  ${{ github.event.inputs.optuna_image }} chandra25ms/${{ github.event.inputs.optuna_image }}
           #docker push chandra25ms/${{ github.event.inputs.optuna_image }}
           
-          docker tag  kruize/autotune_optuna:0.0.5 chandra25ms/autotune_optuna:0.0.5
-          docker push chandra25ms/autotune_optuna:0.0.5
+          #docker tag  kruize/autotune_optuna:0.0.5 chandra25ms/autotune_optuna:0.0.5
+          #docker push chandra25ms/autotune_optuna:0.0.5
           
       - name: Deploy autotune
         run: |
@@ -100,5 +100,5 @@ jobs:
           echo Running Basic API tests
           cd autotune/tests
           #./test_autotune.sh -c minikube -i chandra25ms/${{ github.event.inputs.operator_image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
-          #./test_autotune.sh -c minikube -i chandra25ms/autotune_operator:0.0.5 --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          ./test_autotune.sh -c minikube -i kruize/autotune_operator:0.0.5 --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
    
