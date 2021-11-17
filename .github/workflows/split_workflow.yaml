@@ -1,0 +1,104 @@
+name: workflow-dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: 'Github Repository'
+        required: false
+        default: 'kruize/autotune'
+      branch:
+        description: 'Branch name'
+        required: false
+        default: 'master'
+      operator_image: 
+        description: 'Autotune Operator Docker image'
+        required: false
+        default: 'autotune_operator:test'
+      optuna_image: 
+        description: 'Autotune optuna Docker image'
+        required: false
+        default: 'autotune_optuna:test'
+      testsuite:
+         description: 'Testsuite to be executed'
+         required: false
+         default: 'basic_api_tests'
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          echo "Repo: ${{ github.event.inputs.repository }}"
+          echo "Branch: ${{ github.event.inputs.branch }}"
+          echo "image: ${{ github.event.inputs.image }}"
+          echo "Testsuite: ${{ github.event.inputs.testsuite }}"
+   
+      - name: Checkout autotune
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.inputs.repository }}
+          ref: ${{ github.event.inputs.branch }}
+          path: autotune
+
+      - name: Checkout benchmarks
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/benchmarks
+          path: benchmarks
+
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - name: Start minikube
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+      - name: Build autotune
+        run: |
+          echo Build autotune
+          cd autotune
+          ./build.sh -i ${{ github.event.inputs.operator_image }} -o ${{ github.event.inputs.optuna_image }}
+          docker images | grep autotune     
+      - name: Install Prometheus on minikube
+        run: |
+          echo Install Prometheus on minikube
+          cd autotune/scripts
+          ./prometheus_on_minikube.sh -as
+      - name: docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Push
+        run: |
+          docker tag  ${{ github.event.inputs.operator_image }} chandra25ms/${{ github.event.inputs.operator_image }}
+          docker push chandra25ms/${{ github.event.inputs.operator_image }}
+          
+          docker tag  ${{ github.event.inputs.optuna_image }} chandra25ms/${{ github.event.inputs.optuna_image }}
+          docker push chandra25ms/${{ github.event.inputs.optuna_image }}
+          
+      - name: Run Analyzer API tests
+        run: |
+          echo Running Basic API tests
+          cd autotune/tests
+          ./test_autotune.sh -c minikube -i chandra25ms/${{ github.event.inputs.operator_image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf autotune_test_results.tar autotune_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: autotune-results
+           path: ./autotune_test_results.tar
+           retention-days: 2
