@@ -6,11 +6,11 @@ on:
       repository:
         description: 'Github Repository'
         required: false
-        default: 'kruize/autotune'
+        default: 'chandrams/autotune'
       branch:
         description: 'Branch name'
         required: false
-        default: 'master'
+        default: 'hpo'
       image: 
         description: 'Autotune Docker image'
         required: false
@@ -18,7 +18,7 @@ on:
       testsuite:
          description: 'Testsuite to be executed'
          required: false
-         default: 'basic_api_tests'
+         default: 'hpo_api_tests'
         
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
           
       - name: Run Analyzer API tests
         run: |
-          echo Running Basic API tests
+          echo Running API tests
           cd autotune/tests
           ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
       - name: Archive results
