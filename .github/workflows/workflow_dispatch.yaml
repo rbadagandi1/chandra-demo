@@ -57,7 +57,7 @@ jobs:
         run: |
           echo Build autotune
           cd autotune
-          ./build.sh -t  ${{ github.event.inputs.image }}
+          ./build.sh -i ${{ github.event.inputs.image }}
           docker images | grep autotune     
       - name: Install Prometheus on minikube
         run: |
