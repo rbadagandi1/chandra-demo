@@ -72,14 +72,14 @@ jobs:
 
       - name: Docker Push
         run: |
-          docker tag  ${{ github.event.inputs.image }} kruize/${{ github.event.inputs.image }}
-          docker push kruize/${{ github.event.inputs.image }}
+          docker tag  ${{ github.event.inputs.image }} chandra25ms/${{ github.event.inputs.image }}
+          docker push chandra25ms/${{ github.event.inputs.image }}
           
       - name: Run Analyzer API tests
         run: |
           echo Running Basic API tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          ./test_autotune.sh -c minikube -i chandra25ms/${{ github.event.inputs.image }} --tctype=functional --testsuite=${{ github.event.inputs.testsuite }} --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
       - name: Archive results
         if: always()
         run: |
