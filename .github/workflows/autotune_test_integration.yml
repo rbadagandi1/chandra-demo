@@ -20,10 +20,14 @@ on:
         description: 'Branch name'
         required: false
         default: 'integration-channel-RM-EM'
-      image: 
+      autotune_image: 
         description: 'Autotune Docker image'
         required: false
-        default: 'autotune:0.0.6_int'
+        default: 'kruize/autotune_operator:0.0.6_int'
+      optuna_image: 
+        description: 'Optuna Docker image'
+        required: false
+        default: 'kruize/autotune_optuna:0.0.6_int'
       testsuite:
          description: 'Testsuite to be executed'
          required: false
@@ -48,8 +52,8 @@ jobs:
           echo Running HPO API tests
           cd autotune/tests
           ./scripts/hpo/start_hpo_servers.sh -t
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks -t
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks -t
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=hpo_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks
       - name: Upload results
         uses: ./.github/actions/upload-results
         with:
@@ -69,7 +73,7 @@ jobs:
         run: |
           echo Running Analyzer API tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=basic_api_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
       - name: Upload results
         uses: ./.github/actions/upload-results
         with:
@@ -88,7 +92,7 @@ jobs:
         run: |
           echo Running Autotune YAML tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=app_autotune_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=app_autotune_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
       - name: Upload results
         uses: ./.github/actions/upload-results
         with:
@@ -107,7 +111,7 @@ jobs:
         run: |
           echo Running Autotune Config YAML tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks 
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=autotune_config_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks 
       - name: Upload results
         uses: ./.github/actions/upload-results
         with:
@@ -129,7 +133,7 @@ jobs:
         run: |
           echo Running Autotune Config map tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=configmap_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=configmap_yaml_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
       - name: Upload results
         uses: ./.github/actions/upload-results
@@ -152,7 +156,7 @@ jobs:
         run: |
           echo Running Autotune ID tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=autotune_id_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=autotune_id_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
       - name: Upload results
         uses: ./.github/actions/upload-results
@@ -175,7 +179,7 @@ jobs:
         run: |
           echo Running modify autotune config tests
           cd autotune/tests
-          ./test_autotune.sh -c minikube -i kruize/${{ github.event.inputs.image }} --tctype=functional --testsuite=modify_autotune_config_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.autotune_image }} -o ${{ github.event.inputs.optuna_image }} --tctype=functional --testsuite=modify_autotune_config_tests --resultsdir=${GITHUB_WORKSPACE} -r ${GITHUB_WORKSPACE}/benchmarks    
 
       - name: Upload results
         uses: ./.github/actions/upload-results
