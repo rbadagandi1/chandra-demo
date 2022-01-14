@@ -56,7 +56,7 @@ jobs:
           cd autotune/scripts
           ./prometheus_on_minikube.sh -as
 
-      - name: Deploy autotune
+      - name: Update Image policy to IfNotPresent
         run: |
           echo Deploy autotune
           cd autotune
@@ -65,8 +65,7 @@ jobs:
           echo "***************************************************************"
           cat ./manifests/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
-          ./deploy.sh -c minikube -i autotune:int-test
-
+    
       - name: Run Analyzer API tests
         run: |
           echo Running Basic API tests
