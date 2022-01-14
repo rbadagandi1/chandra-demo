@@ -1,4 +1,4 @@
-name: Int Test on Pull Request 
+name: Test on PR Integration branch
 
 # Controls when the action will run. 
 on:
