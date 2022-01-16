@@ -1,0 +1,26 @@
+name: Upload artifacts to a URL
+
+# Controls when the action will run. 
+on:
+  workflow_dispatch:
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+
+      - name: Upload artifacts to a URL
+        run: echo "hello world" > hello-chandra.txt
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+        GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: https://chandrams/demo.git
+          asset_path: ./bin/hello-chandra.tar.gz
+          asset_name: hello-chandra.tar.gz
+          asset_content_type: application/gzip
