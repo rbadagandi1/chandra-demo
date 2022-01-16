@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: https://chandrams/demo.git
+          upload_url: https://github.com/chandrams/demo.git
           asset_path: ./hello-chandra.txt
           asset_name: hello-chandra.txt
           asset_content_type: application/txt
