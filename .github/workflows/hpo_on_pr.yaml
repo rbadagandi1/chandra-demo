@@ -27,7 +27,7 @@ jobs:
           echo Build hpo container image
           ls
           cd hpo
-          ./build.sh -h hpo:test
+          ./build_hpo.sh -h hpo:test
           docker images | grep hpo
 
   test_on_native:
