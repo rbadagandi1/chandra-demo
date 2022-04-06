@@ -42,7 +42,9 @@ jobs:
         run: |
           echo Running sanity test on native
           ls
-          cd hpo/tests
+          cd hpo
+          python3 -m pip install -r requirements.txt
+          cd tests
           ls
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
