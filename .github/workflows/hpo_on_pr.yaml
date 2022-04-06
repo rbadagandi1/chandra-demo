@@ -23,6 +23,7 @@ jobs:
       - name: Build hpo
         run: |
           echo Build hpo container image
+          ls
           cd hpo
           ./build.sh -h hpo:test
           docker images | grep hpo
