@@ -1,4 +1,4 @@
-name: Test on Pull Request
+name: HPO Test on Pull Request
 
 # Controls when the action will run. 
 on:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  test_on_docker:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -29,6 +29,30 @@ jobs:
           cd hpo
           ./build_hpo.sh
           docker images | grep hpo
+      - name: Sanity test on docker
+        run: |
+          echo Running sanity test on native
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c docker -o kruize/hpo:0.0.1 --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+        
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf hpo_docker_results.tar hpo_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: hpo-results
+           path: ./hpo_docker_results.tar
+           retention-days: 2
+
+
 
   test_on_native:
     runs-on: ubuntu-latest
@@ -53,7 +77,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}
           ls
-          tar cvf hpo_results.tar hpo_test_results
+          tar cvf hpo_native_results.tar hpo_test_results
           ls
           
       - name: Upload results
@@ -61,6 +85,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
            name: hpo-results
-           path: ./hpo_results.tar
+           path: ./hpo_native_results.tar
            retention-days: 2
 
