@@ -91,7 +91,7 @@ jobs:
           #curl -H 'Accept: application/json' http://localhost:8085/experiment_trials?experiment_id=a123&trial_number=0
           echo "Terminating the HPO service..."
           ps -u | grep service.py | grep -v grep | awk '{print $2}' 
-          ps -u | grep service.py | grep -v grep | awk '{print $2}' | xargs kill -9
+          #ps -u | grep service.py | grep -v grep | awk '{print $2}' | xargs kill -9
           #./deploy_hpo.sh -c native -t
           echo Running sanity test on native
           ls
