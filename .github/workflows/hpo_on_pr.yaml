@@ -74,8 +74,8 @@ jobs:
           #./deploy_hpo.sh -c native &
           echo "Starting hpo service..."
           ./tests/scripts/hpo/start_hpo_servers.sh -p ${GITHUB_WORKSPACE} 
-          
-          sleep 10
+          python --version
+          sleep 20
           ps -ef | grep python
           echo "Curl version..."
           curl -V
