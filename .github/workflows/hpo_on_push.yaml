@@ -71,7 +71,7 @@ jobs:
       - name: Sanity test on native
         run: |
           echo Running sanity test on native 
-          cd tests
+          cd hpo/tests
           ./test_hpo.sh -c native --resultsdir=hpo-results --testsuite=hpo_api_tests --testcase=hpo_sanity_test
       - name: Archive results
         if: always()
