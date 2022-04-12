@@ -29,10 +29,7 @@ jobs:
           cd hpo
           ./build_hpo.sh
           docker images | grep hpo
-          docker ps -a
-        
-          curl -V
-          docker logs hpo_docker_container
+                 
           
       - name: Sanity test on docker
         run: |
