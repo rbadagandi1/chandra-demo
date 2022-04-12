@@ -1,4 +1,4 @@
-name: Test on Push
+name: HPO Test on Push
 
 # Controls when the action will run. 
 on:
