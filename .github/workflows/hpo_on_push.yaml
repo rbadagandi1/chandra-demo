@@ -26,7 +26,7 @@ jobs:
         run: |
           echo Build hpo
           cd hpo
-          ./build_hpo.sh -h hpo:test
+          ./build_hpo.sh -o hpo:test
           docker images | grep hpo     
       - name: docker login
         uses: docker/login-action@v1
