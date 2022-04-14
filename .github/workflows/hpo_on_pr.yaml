@@ -33,6 +33,7 @@ jobs:
           
       - name: Sanity test on docker
         run: |
+          ps -ef | grep python
           echo Running sanity test on native
           ls
           cd hpo/tests         
@@ -69,9 +70,9 @@ jobs:
           python --version
           echo "Curl version..."
           curl -V
-          cd hpo         
-       
-          cd tests
+          ps -ef | grep python
+          cd hpo/tests   
+          
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
