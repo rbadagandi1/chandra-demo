@@ -60,7 +60,7 @@ jobs:
            retention-days: 2
 
 
-  test_on_native:
+   test_on_native:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -70,14 +70,21 @@ jobs:
           path: hpo
       - name: Sanity test on native
         run: |
-          echo Running sanity test on native 
-          cd hpo/tests
+          python --version
+          echo "Curl version..."
+          curl -V
+          ps -ef | grep python
+          cd hpo/tests   
+          
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+        
       - name: Archive results
         if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
+          ls
           tar cvf hpo_native_results.tar hpo_test_results
+          ls
           
       - name: Upload results
         if: always()
