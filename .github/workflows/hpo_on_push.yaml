@@ -60,7 +60,7 @@ jobs:
            retention-days: 2
 
 
-   test_on_native:
+  test_on_native:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
