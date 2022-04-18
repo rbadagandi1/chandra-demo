@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
            name: hpo-results
-           path: ./hpo_docker_results.tar
+           path: ./hpo_minikube_results.tar
            retention-days: 2
 
 
