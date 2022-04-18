@@ -9,8 +9,8 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-jobs:
-  # This workflow contains a single job called "build"
+jobs:   
+          
   test_on_docker:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -27,17 +27,17 @@ jobs:
           echo Build hpo container image
           ls
           cd hpo
-          ./build_hpo.sh
+          ./build_hpo.sh -o hpo:test
           docker images | grep hpo
                  
           
       - name: Sanity test on docker
         run: |
           ps -ef | grep python
-          echo Running sanity test on native
+          echo Running sanity test on docker
           ls
           cd hpo/tests         
-          ./test_hpo.sh -c docker -o kruize/hpo:0.0.1 --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+          ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
         if: always()
@@ -45,6 +45,58 @@ jobs:
           cd ${GITHUB_WORKSPACE}
           ls
           tar cvf hpo_docker_results.tar hpo_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: hpo-results
+           path: ./hpo_docker_results.tar
+           retention-days: 2
+           
+  test_on_minikube:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          repository: chandrams/hpo
+          ref: trial
+          path: hpo
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.4.3
+        with:
+          minikube version: 'v1.24.0'
+          kubernetes version: 'v1.23.0'
+      - name: Display minikube cluster info and pods
+        run: |
+          minikube ip
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+      - name: Build hpo
+        run: |
+          echo Build hpo container image
+          ls
+          cd hpo
+          ./build_hpo.sh -o hpo:test
+          docker images | grep hpo             
+          
+      - name: Sanity test on minikube
+        run: |
+          ps -ef | grep python
+          echo Running sanity test on minikube
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c minikube -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+        
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf hpo_minikube_results.tar hpo_test_results
           ls
           
       - name: Upload results
@@ -71,8 +123,7 @@ jobs:
           echo "Curl version..."
           curl -V
           ps -ef | grep python
-          cd hpo/tests   
-          
+          cd hpo/tests          
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
