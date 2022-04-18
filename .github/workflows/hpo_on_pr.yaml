@@ -65,11 +65,16 @@ jobs:
           repository: chandrams/hpo
           ref: trial
           path: hpo
+ #     - name: Setup Minikube
+ #       uses: manusa/actions-setup-minikube@v2.4.3
+ #       with:
+ #         minikube version: 'v1.24.0'
+ #        kubernetes version: 'v1.23.0'
       - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.4.3
+        uses: manusa/actions-setup-minikube@v2.3.0
         with:
-          minikube version: 'v1.24.0'
-          kubernetes version: 'v1.23.0'
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
       - name: Display minikube cluster info and pods
         run: |
           minikube ip
@@ -88,7 +93,8 @@ jobs:
           ps -ef | grep python
           echo Running sanity test on minikube
           ls
-          cd hpo/tests         
+          cd hpo/tests 
+          kubectl create namespace monitoring
           ./test_hpo.sh -c minikube -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
