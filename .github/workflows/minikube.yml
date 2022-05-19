@@ -16,12 +16,11 @@ jobs:
           path: autotune
 
       - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.4.2
+        uses: manusa/actions-setup-minikube@v2.3.0
         with:
-          minikube version: 'v1.22.0'
-          kubernetes version: 'v1.22.0'
-          start args: '--cpus 3'
-          
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+                    
       - name: Minikube info
         run: |
           kubectl get nodes
@@ -31,4 +30,8 @@ jobs:
         run: |
           echo Install Prometheus on minikube  
           cd autotune/scripts
+          kubectl version
+          echo "Running kubectl kustomize --help..."
+          kubectl kustomize --help
+          echo "Running kubectl kustomize --help...done"
           ./prometheus_on_minikube.sh -as    
