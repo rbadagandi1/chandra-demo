@@ -12,7 +12,8 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: kruize/autotune
+          repository: bharathappali/autotune
+          ref: add-fix-for-kustomize
           path: autotune
 
       - name: Setup Minikube
