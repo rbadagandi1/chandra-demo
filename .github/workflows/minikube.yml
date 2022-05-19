@@ -31,8 +31,5 @@ jobs:
         run: |
           echo Install Prometheus on minikube  
           cd autotune/scripts
-          kubectl version --short
-          echo "Running kubectl kustomize --help..."
-          kubectl kustomize --help
-          echo "Running kubectl kustomize --help...done"
+          cat prometheus_on_minikube.sh 
           ./prometheus_on_minikube.sh -as    
