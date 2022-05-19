@@ -23,8 +23,8 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: kruize/autotune
-          ref: integration-channel-RM-EM
+          repository: bharathappali/autotune
+          ref: add-fix-for-kustomize
           path: autotune
 
       - name: Checkout benchmarks
