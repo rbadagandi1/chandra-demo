@@ -54,6 +54,7 @@ jobs:
         run: |
           echo Install Prometheus on minikube
           cd autotune/scripts
+          kubectl version
           ./prometheus_on_minikube.sh -as
 
       - name: Update Image policy to IfNotPresent
