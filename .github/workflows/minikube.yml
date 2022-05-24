@@ -32,4 +32,4 @@ jobs:
           echo Install Prometheus on minikube  
           cd autotune/scripts
           cat prometheus_on_minikube.sh 
-          ./prometheus_on_minikube.sh -as -r v0.10.0   
+          ./prometheus_on_minikube.sh -as -r v0.9.0   
