@@ -19,8 +19,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
-          repository: chandrams/hpo
-          ref: trial
+          repository: kruize/hpo
           path: hpo
       - name: Build hpo
         run: |
@@ -31,13 +30,22 @@ jobs:
           docker images | grep hpo
                  
           
-      - name: Sanity test on docker
+      - name: REST Sanity test on docker
         run: |
           ps -ef | grep python
-          echo Running sanity test on docker
+          echo Running REST sanity test on docker
           ls
           cd hpo/tests         
           ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+          
+      - name: GRPC Sanity test on docker
+        run: |
+          ps -ef | grep python
+          echo Running GRPC sanity test on docker
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_grpc_sanity_test
+        
         
       - name: Archive results
         if: always()
@@ -123,6 +131,15 @@ jobs:
           repository: chandrams/hpo
           ref: trial
           path: hpo
+      - name: GRPC Sanity test on native
+        run: |
+          python --version
+          echo "Curl version..."
+          curl -V
+          ps -ef | grep python
+          cd hpo/tests          
+          ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_grpc_sanity_test
+          
       - name: Sanity test on native
         run: |
           python --version
