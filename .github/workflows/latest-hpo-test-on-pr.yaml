@@ -23,8 +23,7 @@ jobs:
           curl -V
           echo Building hpo container image
           ls
-          cd hpo
-         ./build_hpo.sh -o hpo:test
+          ./build_hpo.sh -o hpo:test
           docker images | grep hpo
           
       - name: Sanity test on docker
