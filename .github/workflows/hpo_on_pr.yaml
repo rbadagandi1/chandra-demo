@@ -23,10 +23,6 @@ jobs:
           path: hpo
       - name: Build hpo
         run: |
-          echo "Install latest python"
-          sudo apt install python3.8
-          python --version
-          which python
           echo Build hpo container image
           ls
           cd hpo
