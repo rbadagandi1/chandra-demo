@@ -15,7 +15,7 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2      
       - name: Build hpo
         run: |
           echo Software versions
@@ -30,7 +30,7 @@ jobs:
         run: |
           echo Running sanity test on docker
           ls
-          cd hpo/tests         
+          cd tests         
           ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
