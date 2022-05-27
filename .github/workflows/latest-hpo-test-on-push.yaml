@@ -31,8 +31,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker Push
         run: |
-          docker tag hpo:test kruize/hpo:test
-          docker push kruize/hpo:test
+          docker tag hpo:test chandra25ms/hpo:test
+          docker push chandra25ms/hpo:test
       - name: Sanity test on docker
         run: |
           echo Running sanity test on docker
