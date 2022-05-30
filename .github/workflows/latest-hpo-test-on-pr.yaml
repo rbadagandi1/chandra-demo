@@ -51,6 +51,49 @@ jobs:
            name: hpo-results
            path: ./hpo_docker_results.tar
            retention-days: 2
+           
+  grpc_test_on_docker:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2  
+        with:
+         repository: chandrams/hpo
+         ref: wait_for_deploy
+         path: hpo
+      - name: Build hpo
+        run: |
+          echo Software versions
+          python --version
+          curl -V
+          echo Building hpo container image
+          ls
+          cd hpo
+          ./build_hpo.sh -o hpo:test
+          docker images | grep hpo
+          
+      - name: Sanity test on docker
+        run: |
+          echo Running GRPC sanity test on docker
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_grpc_sanity_test
+        
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          tar cvf hpo_grpc_docker_results.tar hpo_test_results
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: hpo-results
+           path: ./hpo_grpc_docker_results.tar
+           retention-days: 2
 
   test_on_native:
     runs-on: ubuntu-latest
@@ -68,17 +111,34 @@ jobs:
           echo Running sanity test on native
           cd hpo/tests
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+          
+  grpc_test_on_native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: chandrams/hpo
+          ref: wait_for_deploy
+          path: hpo
+      - name: Sanity test on native
+        run: |
+          echo Software versions
+          python --version
+          curl -V
+          echo Running GRPC sanity test on native
+          cd hpo/tests
+          ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_grpc_sanity_test
         
       - name: Archive results
         if: failure()
         run: |
           cd ${GITHUB_WORKSPACE}
-          tar cvf hpo_native_results.tar hpo_test_results
+          tar cvf hpo_grpc_native_results.tar hpo_test_results
           
       - name: Upload results
         if: failure()
         uses: actions/upload-artifact@v2
         with:
            name: hpo-results
-           path: ./hpo_native_results.tar
+           path: ./hpo_grpc_native_results.tar
            retention-days: 2
