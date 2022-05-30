@@ -55,6 +55,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          repository: kruize/hpo
+          path: hpo
       - name: Sanity test on native
         run: |
           echo Software versions
