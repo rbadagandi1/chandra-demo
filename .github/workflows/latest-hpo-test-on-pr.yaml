@@ -18,8 +18,8 @@ jobs:
       - uses: actions/checkout@v2  
         with:
          repository: chandrams/hpo
-         ref: main
-         path: wait_for_deploy
+         ref: wait_for_deploy
+         path: hpo
       - name: Build hpo
         run: |
           echo Software versions
