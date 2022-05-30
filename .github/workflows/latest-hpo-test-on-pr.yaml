@@ -61,7 +61,7 @@ jobs:
       - uses: actions/checkout@v2  
         with:
          repository: chandrams/hpo
-         ref: wait_for_deploy
+         ref: grpc_prcheck
          path: hpo
       - name: Build hpo
         run: |
@@ -133,7 +133,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: chandrams/hpo
-          ref: wait_for_deploy
+          ref: grpc_prcheck
           path: hpo
       - name: Sanity test on native
         run: |
