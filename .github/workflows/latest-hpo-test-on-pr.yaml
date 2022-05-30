@@ -70,13 +70,13 @@ jobs:
           ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
         
       - name: Archive results
-        if: always()
+        if: failure()
         run: |
           cd ${GITHUB_WORKSPACE}
           tar cvf hpo_native_results.tar hpo_test_results
           
       - name: Upload results
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
            name: hpo-results
