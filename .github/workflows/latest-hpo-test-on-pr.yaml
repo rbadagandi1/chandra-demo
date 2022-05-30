@@ -19,6 +19,7 @@ jobs:
         with:
          repository: chandrams/hpo
          ref: wait_for_deploy
+         path: hpo
       - name: Build hpo
         run: |
           echo Software versions
