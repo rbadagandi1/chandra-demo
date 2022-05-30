@@ -19,7 +19,7 @@ jobs:
         with:
          repository: chandrams/hpo
          ref: main
-         path: hpo
+         path: wait_for_deploy
       - name: Build hpo
         run: |
           echo Software versions
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: chandrams/hpo
-          ref: main
+          ref: wait_for_deploy
           path: hpo
       - name: Sanity test on native
         run: |
