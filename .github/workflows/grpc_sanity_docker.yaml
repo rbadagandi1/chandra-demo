@@ -22,13 +22,21 @@ jobs:
          ref: grpc_prcheck
          path: hpo
       
-      - name: Sanity test on docker
+      - name: GRPC Sanity test on docker
         run: |
           echo Running GRPC sanity test on docker
           ls
           cd hpo/tests         
-          pip install grpcio
+          
           ./test_hpo.sh -c docker -o kruize/hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_grpc_sanity_test
+          
+      - name: Sanity test on docker
+        run: |
+          echo Running sanity test on docker
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c docker -o hpo:test --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests --testcase=hpo_sanity_test
+        
         
       - name: Archive results
         if: failure()
