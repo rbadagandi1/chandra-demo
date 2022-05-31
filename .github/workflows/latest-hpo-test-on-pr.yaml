@@ -76,6 +76,8 @@ jobs:
           
       - name: Sanity test on docker
         run: |
+          echo Installing grpcio package
+          pip install grpcio
           echo Running GRPC sanity test on docker
           ls
           cd hpo/tests         
