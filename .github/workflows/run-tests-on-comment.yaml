@@ -1,0 +1,44 @@
+name: Functional Tests
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  functest:
+
+    # Only run this if the user asked us to
+    if: github.event.comment.body == 'run tests'
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          repository: kruize/hpo
+          path: hpo
+    
+      - name: Run all HPO tests on native
+        run: |
+          ps -ef | grep python
+          echo Running HPO testsuite on native
+          ls
+          cd hpo/tests         
+          ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests 
+          
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf hpo_results.tar hpo_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+           name: hpo-results
+           path: ./hpo_results.tar
+           retention-days: 2
