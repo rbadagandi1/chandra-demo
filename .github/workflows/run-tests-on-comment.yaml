@@ -1,4 +1,4 @@
-name: Functional Tests
+name: HPO tests
 
 on:
   issue_comment:
