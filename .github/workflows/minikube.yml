@@ -12,24 +12,44 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: bharathappali/autotune
-          ref: add-fix-for-kustomize
+          repository: kruize/autotune
+          ref: mvp_demo
           path: autotune
 
       - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.6.0
+        uses: manusa/actions-setup-minikube@v2.7.1
         with:
-          minikube version: 'v1.25.1'
-          kubernetes version: 'v1.24.0'
+          minikube version: 'v1.26.1'
+          kubernetes version: 'v1.25.0'
                     
       - name: Minikube info
         run: |
           kubectl get nodes
           minikube ip      
           
+      - name: Build autotune
+        run: |
+          echo Build autotune
+          cd autotune
+          ./build.sh -i autotune_operator:test
+          docker images | grep autotune     
+      - name: Start minikube
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
       - name: Install Prometheus on minikube
         run: |
-          echo Install Prometheus on minikube  
+          echo Install Prometheus on minikube
           cd autotune/scripts
-          cat prometheus_on_minikube.sh 
-          ./prometheus_on_minikube.sh -as -r v0.9.0   
+          ./prometheus_on_minikube.sh -as
+      - name: Deploy autotune
+        run: |
+          echo Deploy autotune
+          cd autotune
+          cp ./manifests/autotune-operator-deployment.yaml_template ./manifests/autotune-operator-deployment.yaml_template.old
+          sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/autotune-operator-deployment.yaml_template.old > ./manifests/autotune-operator-deployment.yaml_template
+          echo "***************************************************************"
+          cat ./manifests/autotune-operator-deployment.yaml_template
+          echo "***************************************************************"
+          ./deploy.sh -c minikube -i autotune_operator:test
+
