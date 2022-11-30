@@ -19,8 +19,8 @@ jobs:
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.7.1
         with:
-          minikube version: 'v1.26.1'
-          kubernetes version: 'v1.21.0'
+          minikube version: 'v1.25.2'
+          kubernetes version: 'v1.23.5'
                     
       - name: Minikube info
         run: |
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo Install Prometheus on minikube
           cd autotune/scripts
-          ./prometheus_on_minikube.sh -as
+          ./prometheus_on_minikube.sh -as -rv0.10.0
       - name: Deploy autotune
         run: |
           echo Deploy autotune
