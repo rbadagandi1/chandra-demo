@@ -12,15 +12,15 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: kruize/autotune
-          ref: mvp_demo
+          repository: chandrams/autotune
+          ref: prometheus_issue
           path: autotune
 
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.7.1
         with:
-          minikube version: 'v1.25.2'
-          kubernetes version: 'v1.23.5'
+          minikube version: 'v1.26.1'
+          kubernetes version: 'v1.24.0'
                     
       - name: Minikube info
         run: |
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo Install Prometheus on minikube
           cd autotune/scripts
-          ./prometheus_on_minikube.sh -as -rv0.10.0
+          ./prometheus_on_minikube.sh -as -rv0.11.0
       - name: Deploy autotune
         run: |
           echo Deploy autotune
