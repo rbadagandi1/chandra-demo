@@ -19,8 +19,8 @@ jobs:
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.7.1
         with:
-          minikube version: 'v1.26.1'
-          kubernetes version: 'v1.24.0'
+          minikube version: 'v1.25.1'
+          kubernetes version: 'v1.21.0'
                     
       - name: Minikube info
         run: |
