@@ -6,7 +6,7 @@ on:
 jobs:
   minikube-setup:
     # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout autotune
@@ -17,9 +17,9 @@ jobs:
           path: autotune
 
       - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.7.0
+        uses: manusa/actions-setup-minikube@v2.3.0
         with:
-          minikube version: 'v1.26.1'
+          minikube version: 'v1.16.1'
           kubernetes version: 'v1.21.0'
                     
       - name: Minikube info
