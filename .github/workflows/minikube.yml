@@ -41,6 +41,7 @@ jobs:
         run: |
           echo Install Prometheus on minikube
           cd autotune/scripts
+          ./prometheus_on_minikube.sh -t
           ./prometheus_on_minikube.sh -as
       - name: Deploy autotune
         run: |
