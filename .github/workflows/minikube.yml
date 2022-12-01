@@ -12,8 +12,8 @@ jobs:
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
-          repository: kruize/autotune
-          ref: mvp_demo
+          repository: chandrams/autotune
+          ref: prometheus_issue
           path: autotune
 
       - name: Setup Minikube
