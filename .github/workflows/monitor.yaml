@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kruize/autotune
-          ref: main
+          ref: mvp_demo
           path: autotune
 
       - name: Setup Minikube
