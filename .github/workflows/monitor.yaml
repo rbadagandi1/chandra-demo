@@ -12,7 +12,7 @@ jobs:
       - name: Checkout kruize-demos
         uses: actions/checkout@v2
         with:
-          repository: kruize/kruize-demos
+          repository: chandrams/kruize-demos
           ref: reco_demo
           path: kruize-demos
           
