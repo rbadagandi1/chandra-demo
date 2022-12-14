@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
  
 jobs:
-  minikube-setup:
+  monitoring-demo:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
 
