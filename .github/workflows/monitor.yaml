@@ -52,9 +52,8 @@ jobs:
           echo Run Kruize monitoring demo
           cd demo
           ls
-          cd ..
-          cp demo/common_helper.sh kruize_demos
-          cd kruize-demos
+          cp common_helper.sh ../kruize-demos/
+          cd ../kruize-demos
           ls
           cd monitoring_demo
           
