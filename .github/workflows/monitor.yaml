@@ -16,11 +16,18 @@ jobs:
           ref: reco_demo
           path: kruize-demos
           
+      - name: Checkout demo
+        uses: actions/checkout@v2
+        with:
+          repository: chandrams/demo
+          ref: main
+          path: demo
+          
       - name: Checkout autotune
         uses: actions/checkout@v2
         with:
           repository: kruize/autotune
-          ref: reco_demo
+          ref: main
           path: autotune
 
       - name: Setup Minikube
