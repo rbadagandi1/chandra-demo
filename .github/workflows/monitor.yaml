@@ -50,6 +50,9 @@ jobs:
       - name: Kruize Monitoring Demo
         run: |
           echo Run Kruize monitoring demo
+          cd demo
+          ls
+          cd ..
           cp demo/common_helper.sh kruize_demos
           cd kruize-demos
           ls
