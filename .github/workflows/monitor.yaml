@@ -1,0 +1,51 @@
+name: Monitoring Demo
+
+on:
+  workflow_dispatch:
+ 
+jobs:
+  minikube-setup:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout kruize-demos
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/kruize-demos
+          ref: reco_demo
+          path: kruize-demos
+          
+      - name: Checkout autotune
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/autotune
+          ref: reco_demo
+          path: autotune
+
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+                    
+      - name: Minikube info
+        run: |
+          kubectl get nodes
+          minikube ip              
+     
+      - name: Install Prometheus on minikube
+        run: |
+          echo Install Prometheus on minikube
+          cd autotune/scripts
+          ./prometheus_on_minikube.sh -t
+          ./prometheus_on_minikube.sh -as
+      - name: Kruize Monitoring Demo
+        run: |
+          echo Run Kruize monitoring demo
+          cp demo/common_helper.sh kruize_demos
+          cd kruize-demos
+          ls
+          cd monitoring_demo
+          
+          ./monitoring_demo.sh -c minikube -o kruize/autotune_operator:0.0.8_mvp -r
