@@ -66,7 +66,7 @@ jobs:
 
       - name: Upload results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
            name: autotune-results
            path: ./autotune_results.tar
@@ -125,7 +125,7 @@ jobs:
 
       - name: Upload results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
            name: crc-results
            path: ./crc_results.tar
