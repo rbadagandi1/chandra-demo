@@ -43,8 +43,7 @@ jobs:
       - name: Install Prometheus on minikube
         run: |
           echo Install Prometheus on minikube
-          cd scripts
-          cd autotune
+          cd autotune/scripts
           ./prometheus_on_minikube.sh -as
       - name: Deploy autotune
         run: |
@@ -58,7 +57,7 @@ jobs:
           ./deploy.sh -c minikube -i autotune_operator:test
           sleep 20
           autotune_pod=$(kubectl get pod -n monitoring | grep autotune | cut -d " " -f1)
-          kubectl logs ${autotune_pod} -n monitoring > ${GITHUB_WORKSPACE}/kruize_pod_log.txt 2>&1
+          kubectl logs ${autotune_pod} -n monitoring -c autotune > ${GITHUB_WORKSPACE}/kruize_pod_log.txt 2>&1
       - name: Archive results
         if: always()
         run: |
@@ -111,7 +110,7 @@ jobs:
           echo "***************************************************************"
           cd autotune
           cp ./manifests/crc/kruize-crc-minikube.yaml ./manifests/crc/kruize-crc-minikube.yaml.old
-          sed -e "s/image: \"kruize\/autotune_operator:test\"/image: \"autotune_operator:test\"/g" ./manifests/crc/kruize-crc-minikube.yaml.old > ./manifests/crc/kruize-crc-minikube.yaml
+          sed -e "s/image: \"kruize\/autotune_operator:0.0.8_mvp\"/image: \"autotune_operator:test\"/g" ./manifests/crc/kruize-crc-minikube.yaml.old > ./manifests/crc/kruize-crc-minikube.yaml
           sed -i "s/imagePullPolicy: Always/image: IfNotPresent/g" ./manifests/crc/kruize-crc-minikube.yaml
           cat ./manifests/crc/kruize-crc-minikube.yaml
           kubectl apply -f ./manifests/crc/kruize-crc-minikube.yaml
