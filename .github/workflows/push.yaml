@@ -23,9 +23,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+         repository: kruize/autotune
+         ref: mvp_demo
+         path: autotune
       - name: Build monitoring
         run: |
           echo Build monitoring
+          cd autotune
           ./build.sh -i autotune_operator:test -o autotune_optuna:test
           docker images | grep autotune
       - name: docker login
