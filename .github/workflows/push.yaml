@@ -34,7 +34,7 @@ jobs:
           ./build.sh -i autotune_operator:test -o autotune_optuna:test
           docker images | grep autotune
       - name: docker login
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
