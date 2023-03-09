@@ -38,7 +38,7 @@ jobs:
       - name: Run the test
         run: |
           cd autotune/tests
-          ./test_autotune.sh -c minikube -r ${GITHUB_WORKSPACE}/benchmarks --resultsdir=${GITHUB_WORKSPACE}/kruize_test_results -i autotune:0.0.10_mvp --testsuite=remote_monitoring_test --testcase=test_update_results
+          ./test_autotune.sh -c minikube -r ${GITHUB_WORKSPACE}/benchmarks --resultsdir=${GITHUB_WORKSPACE}/kruize_test_results -i autotune:0.0.10_mvp --testsuite=remote_monitoring_tests --testcase=test_update_results
       - name: Archive results
         if: always()
         run: |
