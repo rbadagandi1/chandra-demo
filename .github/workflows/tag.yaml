@@ -1,4 +1,4 @@
-name: Bump version
+name: Release Kruize
 on:
   workflow_dispatch:
 jobs:
@@ -10,6 +10,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kruize/autotune
+          ref: mvp_demo
           path: autotune
 
       - name: Checkout benchmarks
@@ -32,11 +33,24 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: kruize/autotune
+          ref: mvp_demo
           path: autotune
       - name: Run the test
         run: |
           cd autotune/tests
-          ./test_autotune.sh -c minikube -r ${GITHUB_WORKSPACE}/benchmarks --resultsdir=${GITHUB_WORKSPACE}/kruize_test_result -i --testsuite=remote_monitoring_test --testcase=test_update_results
+          ./test_autotune.sh -c minikube -r ${GITHUB_WORKSPACE}/benchmarks --resultsdir=${GITHUB_WORKSPACE}/kruize_test_results -i --testsuite=remote_monitoring_test --testcase=test_update_results
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          tar zcvf kruize_test_results.tgz kruize_test_results
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: kruize-results
+          path: ./kruize_test_results.tgz
+          retention-days: 2  
     
   push-to-dockerhub:
     needs: test
@@ -52,6 +66,22 @@ jobs:
         run: |
           docker tag autotune:0.0.10_mvp chandra25ms/autotune:0.0.10_mvp
           docker push chandra25ms/autotune:0.0.10_mvp
+        
+  push-to-quay:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: docker login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: quay.io
+
+      - name: Docker Push
+        run: |
+          docker tag autotune:0.0.10_mvp quay.io/chandra25ms/autotune:0.0.10_mvp
+          docker push quay.io/chandra25ms/autotune:0.0.10_mvp
           
   tag-version:
     needs: test
