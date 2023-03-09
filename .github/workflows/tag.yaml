@@ -12,13 +12,6 @@ jobs:
           repository: kruize/autotune
           ref: mvp_demo
           path: autotune
-
-      - name: Checkout benchmarks
-        uses: actions/checkout@v2
-        with:
-          repository: kruize/benchmarks
-          path: benchmarks
-
       - name: Build autotune
         run: |
           echo Build autotune
@@ -34,7 +27,12 @@ jobs:
         with:
           repository: kruize/autotune
           ref: mvp_demo
-          path: autotune
+          path: autotune      
+      - name: Checkout benchmarks
+        uses: actions/checkout@v2
+        with:
+          repository: kruize/benchmarks
+          path: benchmarks
       - name: Run the test
         run: |
           cd autotune/tests
