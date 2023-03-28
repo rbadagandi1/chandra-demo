@@ -12,33 +12,40 @@ jobs:
     # Only run this if the user asked us to
     if: github.event.comment.body == 'run tests'
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
         with:
-          repository: kruize/hpo
-          path: hpo
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          path: autotune
+          ref: mvp_demo
     
-      - name: Run all HPO tests on native
+      - name: Run Kruize remote monitoring tests on minikube
         run: |
           ps -ef | grep python
-          echo Running HPO testsuite on native
+          echo Running Kruize remote monitoring testsuite on minikube
           ls
-          cd hpo/tests         
-          ./test_hpo.sh -c native --resultsdir=${GITHUB_WORKSPACE} --testsuite=hpo_api_tests 
+          cd autotune/tests         
+          ./test_autotune.sh -c minikube -i kruize/autotune_operator:test --testsuite=remote_monitoring_tests --resultsdir=${GITHUB_WORKSPACE}
           
       - name: Archive results
         if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
           ls
-          tar cvf hpo_results.tar hpo_test_results
+          tar cvf kruize_test_results.tar kruize_test_results
           ls
           
       - name: Upload results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-           name: hpo-results
-           path: ./hpo_results.tar
+           name: kruize_test_results
+           path: ./kruize_test_results.tar
            retention-days: 2
