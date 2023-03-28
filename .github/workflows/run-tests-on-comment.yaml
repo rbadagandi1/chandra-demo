@@ -1,4 +1,4 @@
-name: HPO tests
+name: Kruize Remote monitoring tests
 
 on:
   issue_comment:
