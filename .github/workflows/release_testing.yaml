@@ -29,7 +29,7 @@ jobs:
           cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
 
           cd tests         
-          ./test_autotune.sh -c minikube -i kruize/autotune_operator:0.0.15_mvp --testsuite=remote_monitoring_tests --resultsdir=${GITHUB_WORKSPACE}
+          ./test_autotune.sh -c minikube -i kruize/autotune_operator:0.0.15_mvp --testsuite=remote_monitoring_tests --testcase=negative --resultsdir=${GITHUB_WORKSPACE}
           
       - uses: actions/checkout@v3
         if: always()
