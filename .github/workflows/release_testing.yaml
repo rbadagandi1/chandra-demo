@@ -32,12 +32,14 @@ jobs:
           ./test_autotune.sh -c minikube -i kruize/autotune_operator:0.0.15_mvp --testsuite=remote_monitoring_tests --resultsdir=${GITHUB_WORKSPACE}
           
       - uses: actions/checkout@v3
+        if: always()
         with:
           repository: chandra25ms/autotune
           path: autotune-fault
           ref: db_restore_on_pod_delete
           
       - name: Run Kruize remote monitoring fault tolerant tests on minikube
+        if: always()
         run: |
           ps -ef | grep python
           echo Running Kruize remote monitoring fault tolerant testsuite on minikube
