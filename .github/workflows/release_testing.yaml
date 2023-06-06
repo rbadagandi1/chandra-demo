@@ -45,7 +45,7 @@ jobs:
           echo Running Kruize remote monitoring fault tolerant testsuite on minikube
           cd autotune-fault
           cd tests/scripts/remote_monitoring_tests/fault_tolerant_tests         
-          ./remote_monitoring_fault_tolerant_tests.sh -c minikube -i kruize/autotune_operator:0.0.15_mvp  -r  ${GITHUB_WORKSPACE}
+          ./remote_monitoring_fault_tolerant_tests.sh -c minikube -i kruize/autotune_operator:0.0.14_mvp  -r  ${GITHUB_WORKSPACE}
           
       - name: Archive results
         if: always()
