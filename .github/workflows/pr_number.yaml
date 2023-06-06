@@ -1,0 +1,39 @@
+name: Build image with PR Number 
+
+# Controls when the action will run. 
+on:
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'examples/**'
+      - 'extensions/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build_crc:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+         repository: kruize/autotune
+         ref: mvp_demo
+         path: autotune
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - name: Build crc
+        run: |
+          echo Build crc
+          cd autotune
+          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          ./build.sh -i autotune_operator:pr-${PR_NUMBER}
+          docker images | grep autotune
+     
