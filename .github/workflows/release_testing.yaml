@@ -3,8 +3,8 @@ name: Kruize Remote monitoring release tests
 on:
   workflow_dispatch:
     inputs:
-      tag: 
-        description: 'Kruize docker image tag'
+      image: 
+        description: 'Kruize docker image'
         required: true
         
 jobs:
@@ -29,7 +29,7 @@ jobs:
           echo Running Kruize remote monitoring functional testsuite on minikube
           cd autotune
           cd tests         
-          ./test_autotune.sh -c minikube -i kruize/autotune_operator:${{ github.event.inputs.image }} --testsuite=remote_monitoring_tests --testcase=negative --resultsdir=${GITHUB_WORKSPACE}
+          ./test_autotune.sh -c minikube -i ${{ github.event.inputs.image }} --testsuite=remote_monitoring_tests --resultsdir=${GITHUB_WORKSPACE}
           
       - uses: actions/checkout@v3
         if: always()
@@ -45,7 +45,7 @@ jobs:
           echo Running Kruize remote monitoring fault tolerant testsuite on minikube
           cd autotune-fault
           cd tests/scripts/remote_monitoring_tests/fault_tolerant_tests         
-          ./remote_monitoring_fault_tolerant_tests.sh -c minikube -i kruize/autotune_operator:0.0.14_mvp  -r  ${GITHUB_WORKSPACE}
+          ./remote_monitoring_fault_tolerant_tests.sh -c minikube -i ${{ github.event.inputs.image }}  -r  ${GITHUB_WORKSPACE}
           
       - name: Archive results
         if: always()
