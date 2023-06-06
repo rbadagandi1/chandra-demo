@@ -33,7 +33,7 @@ jobs:
         run: |
           echo Build crc
           cd autotune
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          PR_NUMBER=${{ github.event.pull_request.number }}
           ./build.sh -i autotune_operator:pr-${PR_NUMBER}
           docker images | grep autotune
      
