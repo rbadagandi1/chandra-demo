@@ -21,5 +21,16 @@ jobs:
           PR_NUMBER=${{ github.event.pull_request.number }}
           echo "PR_NUMBER = $PR_NUMBER"
        
-    
-     
+      - name: Get PR number
+        id: pr
+        run: |
+          echo "Commit SHA: ${{ github.sha }}"
+          PR_NUMBER=$(curl -s -X GET \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+            | jq -r '.[0].number')
+          echo "::set-output name=pr_number::$PR_NUMBER"
+      
+      - name: Print PR number
+        run: |
+          echo "PR number: ${{ steps.pr.outputs.pr_number }}"
