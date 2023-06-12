@@ -37,8 +37,7 @@ jobs:
           cd autotune
           PR_NUMBER=${{ github.event.pull_request.number }}
           echo "PR_NUMBER = $PR_NUMBER"
-          ISSUE_NUMBER=${{ github.event.issue.number }}
-          echo "ISSUE_NUMBER = $ISSUE_NUMBER"
+       
           #./build.sh -i autotune_operator:pr-${PR_NUMBER}
           #docker images | grep autotune
      
