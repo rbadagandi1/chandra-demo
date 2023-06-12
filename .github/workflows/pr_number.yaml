@@ -21,23 +21,12 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-        with:
-         repository: kruize/autotune
-         ref: mvp_demo
-         path: autotune
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.0
-        with:
-          minikube version: 'v1.16.0'
-          kubernetes version: 'v1.19.2'
+   
       - name: Build crc
         run: |
-          echo Build crc
-          cd autotune
+       
           PR_NUMBER=${{ github.event.pull_request.number }}
           echo "PR_NUMBER = $PR_NUMBER"
        
-          #./build.sh -i autotune_operator:pr-${PR_NUMBER}
-          #docker images | grep autotune
+    
      
