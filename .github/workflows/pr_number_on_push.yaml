@@ -1,4 +1,4 @@
-name: Build image with PR Number 
+name: Build image with PR Number on Push
 
 # Controls when the action will run. 
 on:
