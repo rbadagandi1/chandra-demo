@@ -2,13 +2,6 @@ name: Build image with PR Number
 
 # Controls when the action will run. 
 on:
-  pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'design/**'
-      - 'examples/**'
-      - 'extensions/**'
-  
   
   push:
   # Allows you to run this workflow manually from the Actions tab
