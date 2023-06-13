@@ -1,0 +1,32 @@
+name: Main Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Get PR Number action
+        id: pr_action
+        uses: ./.github/actions/get-pr-number
+
+      - name: Run step using PR number
+        run: |
+          echo "PR number: ${{ needs.pr_action.outputs.pr_number }}"
+          # Use the PR number in subsequent steps or perform other actions
+
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Get PR Number action
+        id: pr_action
+        uses: ./.github/actions/get-pr-number
+
+      - name: Run step using PR number
+        run: |
+          echo "PR number: ${{ needs.pr_action.outputs.pr_number }}"
+          # Use the PR number in subsequent steps or perform other actions
