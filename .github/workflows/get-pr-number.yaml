@@ -8,15 +8,13 @@ on:
 jobs:
   get_pr_number:
     runs-on: ubuntu-latest
-    outputs:
-      pr_number: ${{ steps.pr.outputs.pr_number }}
-
+   
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Get PR number
-        id: pr_num
+        id: pr
         run: |
           echo "Commit SHA: ${{ github.sha }}"
           pr_number=$(curl -s -X GET \
