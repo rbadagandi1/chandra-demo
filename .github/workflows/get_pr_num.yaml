@@ -1,4 +1,4 @@
-name: Get PR number
+name: Fetch PR Number
 
 on:
   pull_request:
