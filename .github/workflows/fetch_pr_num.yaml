@@ -1,23 +1,18 @@
 name: Fetch PR Number
 
-on:
-  pull_request:
-    branches:
-      - main
-  push:
+
+on: [push, pull_request]
 
 jobs:
-  
-  job1:
-    uses: ./.github/workflows/get-pr-number.yaml  
-    
-  job2:
+  get-pr-number:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-    
-      - name: Run step using PR number
-        run: |
-          echo "PR number: ${{ needs.job1.env.pr_number }}"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get PR number
+      id: action
+      uses: kamatama41/get-pr-number-action@v0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Show the number
+      run: echo "PR number is ${{ steps.action.outputs.number }}"
      
