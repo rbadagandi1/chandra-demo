@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Use Get PR Number action
         id: pr_action
-        uses: ./.github/actions/get-pr-number
+        uses: ./.github/actions/get-pr-number.yml
 
       - name: Run step using PR number
         run: |
@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Use Get PR Number action
         id: pr_action
-        uses: ./.github/actions/get-pr-number
+        uses: ./.github/actions/get-pr-number.yml
 
       - name: Run step using PR number
         run: |
