@@ -1,0 +1,31 @@
+name: Get PR number
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Get PR Number action
+        id: pr_action
+        uses: ./.github/actions/get-pr-number.yml
+
+      - name: Run step using PR number
+        run: |
+          echo "PR number: ${{ steps.pr_action.outputs.pr_number }}"
+          # Use the PR number in subsequent steps or perform other actions
+
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Get PR Number action
+        id: pr_action
+        uses: ./.github/actions/get-pr-number.yml
+
+      - name: Run step using PR number
+        run: |
+          echo "PR number: ${{ steps.pr_action.outputs.pr_number }}"
+          # Use the PR number in subsequent steps or perform other actions
