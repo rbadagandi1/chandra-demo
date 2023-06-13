@@ -1,15 +1,8 @@
 name: Get PR Number
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  get_pr_number:
-    runs-on: ubuntu-latest
-    outputs:
-      pr_number: ${{ steps.pr.outputs.pr_number }}
+runs:
+  using: "composite"
+  outputs:
+     pr_number: ${{ steps.pr.outputs.pr_number }}
     
     steps:
       - name: Checkout repository
