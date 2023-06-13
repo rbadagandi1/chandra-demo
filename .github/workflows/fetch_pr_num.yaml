@@ -15,7 +15,7 @@ jobs:
 
       
       - name: Use Get PR Number action
-        id: pr_num
+        id: pr_action
         uses: ./.github/actions/get-pr-number
 
       - name: Run step using PR number
@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Use Get PR Number action
-        id: pr_num
+        id: pr_action
         uses: ./.github/actions/get-pr-number
 
       - name: Run step using PR number
