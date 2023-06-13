@@ -8,7 +8,11 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    steps:
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      
       - name: Use Get PR Number action
         id: pr_action
         uses: ./.github/actions/get-pr-number
@@ -21,6 +25,9 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Use Get PR Number action
         id: pr_action
         uses: ./.github/actions/get-pr-number
