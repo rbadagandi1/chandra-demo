@@ -8,7 +8,7 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      run: actions/checkout@v2
 
     - name: Get PR number
       id: pr
@@ -22,3 +22,4 @@ runs:
 outputs:
   pr_number:
     description: 'PR Number'
+
