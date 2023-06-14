@@ -51,12 +51,13 @@ jobs:
       - name: Deploy kruize in experiment mode
         run: |
           echo Deploy kruize in experiment mode
+          cd autotune
           cp ./manifests/autotune/autotune-operator-deployment.yaml_template ./manifests/autotune/autotune-operator-deployment.yaml_template.old
           sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/autotune/autotune-operator-deployment.yaml_template.old > ./manifests/autotune/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
           cat ./manifests/autotune/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
-          cd autotune
+          
           echo "PR_NUMBER = ${{ env.pr_number }}"
           ./deploy.sh -c minikube -i autotune_operator:${{ env.pr_number }}
           sleep 20
