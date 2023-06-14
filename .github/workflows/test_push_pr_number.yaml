@@ -42,7 +42,7 @@ jobs:
         run: |
           echo Build monitoring
           cd autotune
-          ./build.sh -i autotune_operator:${{ env.pr_number }} -o autotune_optuna:${{ env.pr_number }}
+          ./build.sh -i autotune_operator:pr_${{ env.pr_number }} -o autotune_optuna:pr_${{ env.pr_number }}
           docker images | grep autotune
       - name: docker login
         uses: docker/login-action@v2
