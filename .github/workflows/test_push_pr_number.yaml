@@ -51,8 +51,8 @@ jobs:
           password: qp1al2zm$
       - name: Docker Push
         run: |
-          docker tag autotune_operator:${{ env.pr_number }} kruize/autotune_operator:${{ env.pr_number }}
-          docker push kruize/autotune_operator:pr_${{ env.pr_number }}
+          docker tag autotune_operator:${{ env.pr_number }} chandra25ms/autotune_operator:${{ env.pr_number }}
+          docker push chandra25ms/autotune_operator:pr_${{ env.pr_number }}
 
   deploy_autotune:
     # The type of runner that the job will run on
