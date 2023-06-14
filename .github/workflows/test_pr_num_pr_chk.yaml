@@ -60,6 +60,7 @@ jobs:
           
           echo "PR_NUMBER = ${{ env.pr_number }}"
           ./deploy.sh -c minikube -i autotune_operator:${{ env.pr_number }}
+
           sleep 20
       - name: Capture ffdc logs
         if: always()
