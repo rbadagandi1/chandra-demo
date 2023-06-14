@@ -21,6 +21,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -31,6 +35,7 @@ jobs:
           echo Build autotune
           pr_number=${{ github.event.pull_request.number }}
           echo "PR NUMBER = ${pr_number}"
+          cd autotune
           ./build.sh -i autotune_operator:${pr_number}
           docker images | grep autotune     
       - name: Check cluster info on minikube
@@ -40,6 +45,7 @@ jobs:
       - name: Install Prometheus on minikube
         run: |
           echo Install Prometheus on minikube
+          cd autotune
           cd scripts
           ./prometheus_on_minikube.sh -as
       - name: Deploy kruize in experiment mode
@@ -50,6 +56,8 @@ jobs:
           echo "***************************************************************"
           cat ./manifests/autotune/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
+          cd autotune
+          echo "PR_NUMBER = ${pr_number}"
           ./deploy.sh -c minikube -i autotune_operator:${pr_number}
           sleep 20
       - name: Capture ffdc logs
@@ -79,6 +87,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -89,6 +101,7 @@ jobs:
           echo Build crc
           pr_number=${{ github.event.pull_request.number }}
           echo "PR NUMBER = ${pr_number}"
+          cd autotune
           ./build.sh -i autotune_operator:${pr_number}
           docker images | grep autotune
       - name: Check cluster info on minikube
@@ -103,12 +116,14 @@ jobs:
       - name: Deploy Kruize in crc mode
         run: |
           echo Deploy kruize in crc mode
+          cd autotune
           echo "***************************************************************"
           cp ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old
           sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old > ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
           cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
-
+  
           cd tests
+          echo "PR_NUMBER = ${pr_number}"
           ./test_autotune.sh -c minikube -i autotune_operator:${pr_number} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
       - name: Capture ffdc logs
         if: always()
