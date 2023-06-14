@@ -23,6 +23,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
       - name: Get PR number
         id: pr_num
         run: |
@@ -31,12 +35,13 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
             | jq -r '.[0].number')
-          echo "PR NUMBER=${pr_number}"
+          echo "pr_number=${pr_number}"
           echo "pr_number=${pr_number}" >> $GITHUB_ENV
 
       - name: Build monitoring
         run: |
           echo Build monitoring
+          cd autotune
           ./build.sh -i autotune_operator:${{ env.pr_number }} -o autotune_optuna:${{ env.pr_number }}
           docker images | grep autotune
       - name: docker login
@@ -57,6 +62,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
       - name: Get PR number
         id: pr_num
         run: |
@@ -65,7 +74,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
             | jq -r '.[0].number')
-          echo "PR NUMBER=${pr_number}"
+          echo "pr_number=${pr_number}"
           echo "pr_number=${pr_number}" >> $GITHUB_ENV
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
@@ -78,17 +87,21 @@ jobs:
           kubectl get pods -n kube-system
       - name: Install Prometheus on minikube
         run: |
-          echo Install Prometheus on minikube  
+          echo Install Prometheus on minikube
+          cd autotune
           cd scripts
           ./prometheus_on_minikube.sh -as    
       - name: Deploy kruize in experiment mode
         run: |
           echo Deploy Kruize in experiment mode
+          echo "pr_number = ${{ env.pr_number }}"
+          cd autotune
           ./deploy.sh -c minikube -i kruize/autotune_operator:${{ env.pr_number }}
           sleep 20
       - name: Capture ffdc logs
         if: always()
         run: |
+          cd autotune
           ./scripts/ffdc.sh -d ${GITHUB_WORKSPACE}
       - name: Archive results
         if: always()
@@ -112,6 +125,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
       - name: Get PR number
         id: pr_num
         run: |
@@ -120,7 +137,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
             | jq -r '.[0].number')
-          echo "PR NUMBER=${pr_number}"
+          echo "pr_number=${pr_number}"
           echo "pr_number=${pr_number}" >> $GITHUB_ENV
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
@@ -133,21 +150,25 @@ jobs:
           kubectl get pods -n kube-system
       - name: Install Prometheus on minikube
         run: |
-          echo Install Prometheus on minikube  
+          echo Install Prometheus on minikube
+          cd autotune
           cd scripts
           ./prometheus_on_minikube.sh -as
       - name: Deploy Kruize in crc mode
         run: |
           echo Deploy Kruize in crc mode
+          cd autotune
           echo "***************************************************************"
           cp ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old
           sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old > ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
           cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
           cd tests
+          echo "pr_number = ${{ env.pr_number }}"
           ./test_autotune.sh -c minikube -i kruize/autotune_operator:${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
       - name: Capture ffdc logs
         if: always()
         run: |
+          cd autotune
           ./scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
       - name: Archive results
         if: always()
