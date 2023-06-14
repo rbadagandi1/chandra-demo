@@ -47,8 +47,8 @@ jobs:
       - name: docker login
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: chandra25ms
+          password: qp1al2zm$
       - name: Docker Push
         run: |
           docker tag autotune_operator:${{ env.pr_number }} kruize/autotune_operator:${{ env.pr_number }}
@@ -96,7 +96,7 @@ jobs:
           echo Deploy Kruize in experiment mode
           echo "pr_number = ${{ env.pr_number }}"
           cd autotune
-          ./deploy.sh -c minikube -i kruize/autotune_operator:${{ env.pr_number }}
+          ./deploy.sh -c minikube -i chandra25ms/autotune_operator:${{ env.pr_number }}
           sleep 20
       - name: Capture ffdc logs
         if: always()
@@ -164,7 +164,7 @@ jobs:
           cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
           cd tests
           echo "pr_number = ${{ env.pr_number }}"
-          ./test_autotune.sh -c minikube -i kruize/autotune_operator:${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
+          ./test_autotune.sh -c minikube -i chandra25ms/autotune_operator:${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
       - name: Capture ffdc logs
         if: always()
         run: |
