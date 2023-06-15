@@ -99,7 +99,7 @@ function clone_repos() {
 		if [ $? -ne 0 ]; then
 			git clone https://github.com/kruize/benchmarks.git 2>/dev/null
 		fi
-		check_err "ERROR: git clone of kruize/benchmarks failed."
+		check_err "ERROR: git clone of kruize/benchmarks failed.!"
 	fi
 	echo "done"
 	echo "#######################################"
