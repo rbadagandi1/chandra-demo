@@ -2,12 +2,14 @@ name: Get PR Number
 
 on:
   workflow_call:
+    outputs:
+      pr_number: ${{ jobs.get_pr_number.outputs.pr_number }}
+   
 jobs:
   get_pr_number:
     runs-on: ubuntu-latest
     outputs:
-      pr_number: ${{ steps.pr.outputs.pr_number }}
-   
+      output1: ${{ steps.pr.outputs.pr_number }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
