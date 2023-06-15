@@ -36,7 +36,7 @@ jobs:
           pr_number=${{ github.event.pull_request.number }}
           echo "pr_number=${pr_number}" >> "$GITHUB_ENV"
           cd autotune
-          ./build.sh -i autotune_operator:${pr_number}
+          ./build.sh -i autotune_operator:pr_${pr_number}
           docker images | grep autotune     
       - name: Check cluster info on minikube
         run: |
@@ -59,13 +59,14 @@ jobs:
           echo "***************************************************************"
           
           echo "PR_NUMBER = ${{ env.pr_number }}"
-          ./deploy.sh -c minikube -i autotune_operator:${{ env.pr_number }}
+          ./deploy.sh -c minikube -i autotune_operator:pr_${{ env.pr_number }}
 
           sleep 20
       - name: Capture ffdc logs
         if: always()
         run: |
           echo "Capturing ffdc logs"
+          cd autotune
           ./scripts/ffdc.sh -d ${GITHUB_WORKSPACE}
       - name: Archive results
         if: always()
@@ -104,7 +105,7 @@ jobs:
           pr_number=${{ github.event.pull_request.number }}
           echo "pr_number=${pr_number}" >> "$GITHUB_ENV"
           cd autotune
-          ./build.sh -i autotune_operator:${pr_number}
+          ./build.sh -i autotune_operator:pr_${pr_number}
           docker images | grep autotune
       - name: Check cluster info on minikube
         run: |
@@ -127,11 +128,12 @@ jobs:
   
           cd tests
           echo "PR_NUMBER = ${{ env.pr_number }}"
-          ./test_autotune.sh -c minikube -i autotune_operator:${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
+          ./test_autotune.sh -c minikube -i autotune_operator:pr_${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
       - name: Capture ffdc logs
         if: always()
         run: |
           echo "Capturing ffdc logs"
+          cd autotune
           ./scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
       - name: Archive results
         if: always()
