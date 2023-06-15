@@ -66,7 +66,7 @@ function sys_cpu_mem_check() {
 	if [ "${SYS_CPU}" -lt "${MIN_CPU}" ]; then
 		echo "CPU's on system : ${SYS_CPU} | Minimum CPU's required for demo : ${MIN_CPU}"
 		print_min_resources
-		echo "ERROR: Exiting due to lack of system resources."
+		echo "ERROR: Exiting due to lack of system resources.!"
 		exit 1
 	fi
 
