@@ -2,8 +2,9 @@ name: Get PR Number
 
 on:
   workflow_call:
-    outputs:
-      pr_number: ${{ jobs.get_pr_number.outputs.pr_number }}
+    outputs: 
+      pr_number: 
+        value: ${{ jobs.get_pr_number.outputs.output1 }}
    
 jobs:
   get_pr_number:
