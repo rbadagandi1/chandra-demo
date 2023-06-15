@@ -137,7 +137,7 @@ function minikube_start() {
 	else
 		minikube start --cpus=${MIN_CPU} --memory=${MIN_MEM}M
 	fi
-	check_err "ERROR: minikube failed to start, exiting"
+	check_err "ERROR: minikube failed to start, exiting!"
 	echo -n "Waiting for cluster to be up..."
 	sleep 10
 	echo "done"
