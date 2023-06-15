@@ -66,8 +66,7 @@ jobs:
           path: autotune
       - name: Get PR number
         run: |
-          echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
-          echo "PR_NUMBER=${pr_number}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ needs.get_pr.outputs.pr_number }}" >> $GITHUB_ENV
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -123,8 +122,7 @@ jobs:
           path: autotune
       - name: Get PR number
         run: |
-          echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
-          echo "PR_NUMBER=${pr_number}" >> $GITHUB_ENV
+           echo "PR_NUMBER=${{ needs.get_pr.outputs.pr_number }}" >> $GITHUB_ENV
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
