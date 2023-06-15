@@ -124,7 +124,7 @@ jobs:
           repository: kruize/autotune
           ref: mvp_demo
           path: autotune
-       - name: Get PR number
+      - name: Get PR number
         run: |
           echo ${{ needs.get_pr.outputs.pr_number }}
           echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
