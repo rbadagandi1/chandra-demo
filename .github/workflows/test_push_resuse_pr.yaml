@@ -33,9 +33,8 @@ jobs:
           path: autotune
       - name: Get PR number
         run: |
-          echo "PR_NUMBER=${{ needs.get_pr.outputs.pr_number }}"
-          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
-
+          echo "PR_NUMBER=${{ needs.get_pr.outputs.pr_number }}" >> $GITHUB_ENV
+        
       - name: Build monitoring
         run: |
           echo Build monitoring
