@@ -183,7 +183,7 @@ function benchmarks_install() {
 		echo "5. Installing TechEmpower (Quarkus REST EASY) benchmark into cluster"
 		pushd techempower >/dev/null
 			kubectl apply -f manifests
-			check_err "ERROR: TechEmpower app failed to start, exiting"
+			check_err "ERROR: TechEmpower app failed to start, exiting!"
 		popd >/dev/null
 	popd >/dev/null
 	echo "#######################################"
