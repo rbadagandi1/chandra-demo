@@ -1,0 +1,175 @@
+name: Test on Push - Reuse PR Number
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push event but only for the mvp_demo branch
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - 'design/**'
+      - 'examples/**'
+      - 'extensions/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  get_pr:
+     uses: chandrams/demo/.github/workflows/get-pr-number.yaml@v1
+     
+  # This workflow contains three jobs called "build job" , "deploy autotune" and "deploy crc"
+  build_job:
+    needs: get_pr
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
+      - name: Get PR number
+        run: |
+          echo ${{ needs.get_pr.outputs.pr_number }}
+          echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
+          echo "pr_number=${pr_number}" >> $GITHUB_ENV
+
+      - name: Build monitoring
+        run: |
+          echo Build monitoring
+          cd autotune
+          ./build.sh -i autotune_operator:pr_${{ env.pr_number }} -o autotune_optuna:pr_${{ env.pr_number }}
+          docker images | grep autotune
+      - name: docker login
+        uses: docker/login-action@v2
+        with:
+          username: chandra25ms
+          password: qp1al2zm$
+      - name: Docker Push
+        run: |
+          docker tag autotune_operator:pr_${{ env.pr_number }} chandra25ms/autotune_operator:pr_${{ env.pr_number }}
+          docker push chandra25ms/autotune_operator:pr_${{ env.pr_number }}
+
+  deploy_autotune:
+    # The type of runner that the job will run on
+    needs: [build_job, get_pr]
+       
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
+      - name: Get PR number
+        run: |
+          echo ${{ needs.get_pr.outputs.pr_number }}
+          echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
+          echo "pr_number=${pr_number}" >> $GITHUB_ENV
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - name: Display cluster info
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+      - name: Install Prometheus on minikube
+        run: |
+          echo Install Prometheus on minikube
+          cd autotune
+          cd scripts
+          ./prometheus_on_minikube.sh -as    
+      - name: Deploy kruize in experiment mode
+        run: |
+          echo Deploy Kruize in experiment mode
+          echo "pr_number = ${{ env.pr_number }}"
+          cd autotune
+          ./deploy.sh -c minikube -i chandra25ms/autotune_operator:pr_${{ env.pr_number }}
+          sleep 20
+      - name: Capture ffdc logs
+        if: always()
+        run: |
+          cd autotune
+          ./scripts/ffdc.sh -d ${GITHUB_WORKSPACE}
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          tar cvf autotune_results.tar kruize_*log.txt
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: autotune-results
+          path: ./autotune_results.tar
+          retention-days: 2
+
+  deploy_crc:
+    # The type of runner that the job will run on
+    needs: [build_job, get_pr]
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          ref: mvp_demo
+          path: autotune
+       - name: Get PR number
+        run: |
+          echo ${{ needs.get_pr.outputs.pr_number }}
+          echo "pr_number=${{ needs.get_pr.outputs.pr_number }}"
+          echo "pr_number=${pr_number}" >> $GITHUB_ENV
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - name: Display cluster info
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+      - name: Install Prometheus on minikube
+        run: |
+          echo Install Prometheus on minikube
+          cd autotune
+          cd scripts
+          ./prometheus_on_minikube.sh -as
+      - name: Deploy Kruize in crc mode
+        run: |
+          echo Deploy Kruize in crc mode
+          cd autotune
+          echo "***************************************************************"
+          cp ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old
+          sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old > ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
+          cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
+          cd tests
+          echo "pr_number = ${{ env.pr_number }}"
+          ./test_autotune.sh -c minikube -i chandra25ms/autotune_operator:pr_${{ env.pr_number }} --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
+      - name: Capture ffdc logs
+        if: always()
+        run: |
+          cd autotune
+          ./scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          tar cvf crc_results.tar kruize_test_results
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: crc-results
+          path: ./crc_results.tar
+          retention-days: 2
