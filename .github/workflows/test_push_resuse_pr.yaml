@@ -16,7 +16,7 @@ on:
 
 jobs:
   get_pr:
-     uses: chandrams/demo/.github/workflows/get-pr-number.yaml
+     uses: ./.github/workflows/get-pr-number.yaml
      
   # This workflow contains three jobs called "build job" , "deploy autotune" and "deploy crc"
   build_job:
