@@ -73,7 +73,7 @@ jobs:
 
           # Store the PAT in a file that can be accessed by the
           # GitHub CLI.
-          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+          echo "${{ secrets.mytoken }}" > token.txt
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
