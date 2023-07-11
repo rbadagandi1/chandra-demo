@@ -35,6 +35,8 @@ jobs:
 
       - name: Send pull-request
         run: |
+        
+          echo "IMAGE TAG = $IMAGE_TAG  IMAGE_NAME = $IMAGE_NAME"
           IMAGE_NAME="quay.io/chandra25ms/autotune"
          
           LATEST_TAG=$(git describe --tags --always --abbrev=0)
@@ -61,7 +63,7 @@ jobs:
 
           # Update the script files to the latest version.
           cp clowdapp.yaml clowdapp.yaml.old
-          sed -e "s/image: ${KRUIZE_IMAGE}:${KRUIZE_IMAGE_TAG}/image: ${IMAGE_NAME}:pr877/g" clowdapp.yaml.old > clowdapp.yaml
+          sed -e "s/${KRUIZE_IMAGE}:${KRUIZE_IMAGE_TAG}/${IMAGE_NAME}:${IMAGE_TAG}/g" clowdapp.yaml.old > clowdapp.yaml
           
           # Commit the changes and push the feature branch to origin
           git add .
