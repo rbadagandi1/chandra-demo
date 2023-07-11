@@ -1,0 +1,27 @@
+name: Regular master commit update check
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Check change
+        run: |
+          mkdir -p $PWD/demo
+          git clone --branch remote_monitoring https://github.com/chandra25ms/demo.git $PWD/demo
+          cd demo
+          git rev-parse --short=7 HEAD > ../.commitsha
+          cd ..
+      - name: Do change if the digest changed
+        run: |
+          git config user.name 'Update-a-Bot'
+          git config user.email 'csubrama@redhat.com'
+          git add .baseimagedigest
+          git commit -m "chore(master): update and rebuild on new master commit" || echo "No new changes"
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: 'chore(master): update image with new master commit'
