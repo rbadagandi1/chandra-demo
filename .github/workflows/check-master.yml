@@ -15,13 +15,74 @@ jobs:
           cd demo
           git rev-parse --short=7 HEAD > ../.commitsha
           cd ..
-      - name: Do change if the digest changed
+      - name: Build kruize image and push to quay
         run: |
-          git config user.name 'Update-a-Bot'
-          git config user.email 'csubrama@redhat.com'
-          git add .baseimagedigest
-          git commit -m "chore(master): update and rebuild on new master commit" || echo "No new changes"
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          title: 'chore(master): update image with new master commit'
+          IMAGE_NAME="quay.io/chandra25ms/autotune"
+          AUTOTUNE_DOCKERFILE="Dockerfile.autotune"
+          AUTOTUNE_GIT_DIR_PATH="$PWD/$AUTOTUNE_GIT_DIR"
+          AUTOTUNE_GIT_BRANCH="remote_monitoring"
+          
+          mkdir -p $AUTOTUNE_GIT_DIR_PATH
+          git clone --branch $AUTOTUNE_GIT_BRANCH https://github.com/kruize/autotune.git $AUTOTUNE_GIT_DIR_PATH
+
+          pushd $AUTOTUNE_GIT_DIR
+          IMAGE_TAG=$(git rev-parse --short=7 HEAD)
+          docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWD" quay.io
+          
+          docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" -f ${AUTOTUNE_DOCKERFILE} .
+          docker push "${IMAGE_NAME}:${IMAGE_TAG}"
+          
+          popd
+
+          rm -fr $AUTOTUNE_GIT_DIR_PATH
+
+      - name: Send pull-request
+        run: |
+          IMAGE_NAME="quay.io/chandra25ms/autotune"
+         
+          LATEST_TAG=$(git describe --tags --always --abbrev=0)
+          REPOSITORY="chandrams/demo2"
+          FOLDER="bin/$REPOSITORY"
+          BRANCH_NAME="chore-update-scripts-to-$LATEST_TAG"
+
+          # Clone the remote repository and change working directory to the
+          # folder it was cloned to.
+          git clone \
+            --depth=1 \
+            --branch=main \
+            https://chandrams:${{ secrets.ACCESS_TOKEN }}@github.com/$REPOSITORY \
+            $FOLDER
+
+          cd $FOLDER
+
+          # Setup the committers identity.
+          git config user.email "csubrama@redhat.com"
+          git config user.name "Chandrakala Subramanyam"
+
+          # Create a new feature branch for the changes.
+          git checkout -b $BRANCH_NAME
+
+          # Update the script files to the latest version.
+          cp clowdapp.yaml clowdapp.yaml.old
+          sed -e s/image: ${KRUIZE_IMAGE}:${KRUIZE_IMAGE_TAG}/image: ${IMAGE_NAME}:pr877/g clowdapp.yaml.old > clowdapp.yaml
+          
+          # Commit the changes and push the feature branch to origin
+          git add .
+          git commit -m "chore: update scripts to $LATEST_TAG"
+          git push origin $BRANCH_NAME
+
+          # Store the PAT in a file that can be accessed by the
+          # GitHub CLI.
+          echo "${{ secrets.ACCESS_TOKEN }}" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title "chore: update scripts to $LATEST_TAG" \
+            --head "$BRANCH_NAME" \
+            --base "main"
+            
+          
+     
