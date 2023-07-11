@@ -19,22 +19,18 @@ jobs:
         run: |
           IMAGE_NAME="quay.io/chandra25ms/autotune"
           AUTOTUNE_DOCKERFILE="Dockerfile.autotune"
-          AUTOTUNE_GIT_DIR_PATH="$PWD/$AUTOTUNE_GIT_DIR"
+          
           AUTOTUNE_GIT_BRANCH="remote_monitoring"
           
-          mkdir -p $AUTOTUNE_GIT_DIR_PATH
-          git clone --branch $AUTOTUNE_GIT_BRANCH https://github.com/kruize/autotune.git $AUTOTUNE_GIT_DIR_PATH
+          git clone --branch $AUTOTUNE_GIT_BRANCH https://github.com/kruize/autotune.git
 
-          pushd $AUTOTUNE_GIT_DIR
+          cd autotune
           IMAGE_TAG=$(git rev-parse --short=7 HEAD)
-          docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWD" quay.io
+          docker login -u="${DOCKER_USER}" -p="${DOCKER_PASSWD}" quay.io
           
           docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" -f ${AUTOTUNE_DOCKERFILE} .
-          docker push "${IMAGE_NAME}:${IMAGE_TAG}"
+          docker push "${IMAGE_NAME}:${IMAGE_TAG}"      
           
-          popd
-
-          rm -fr $AUTOTUNE_GIT_DIR_PATH
 
       - name: Send pull-request
         run: |
