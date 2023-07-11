@@ -11,7 +11,7 @@ jobs:
       - name: Check change
         run: |
           mkdir -p $PWD/demo
-          git clone --branch remote_monitoring https://github.com/chandra25ms/demo.git $PWD/demo
+          git clone --branch remote_monitoring https://github.com/chandrams/demo.git $PWD/demo
           cd demo
           git rev-parse --short=7 HEAD > ../.commitsha
           cd ..
