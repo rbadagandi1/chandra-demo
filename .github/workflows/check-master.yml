@@ -50,7 +50,7 @@ jobs:
           git clone \
             --depth=1 \
             --branch=main \
-            https://chandrams:${{ secrets.ACCESS_TOKEN }}@github.com/$REPOSITORY \
+            https://chandrams:${{ secrets.MYTOKEN }}@github.com/$REPOSITORY \
             $FOLDER
 
           cd $FOLDER
