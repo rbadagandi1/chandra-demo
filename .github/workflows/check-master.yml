@@ -26,7 +26,8 @@ jobs:
 
           cd autotune
           IMAGE_TAG=$(git rev-parse --short=7 HEAD)
-          docker login -u="${{ secrets.DOCKER_USER }}" -p="${{ secrets.DOCKER_PASSWD }}" quay.io
+          docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_PASSWORD }}" quay.io
+          
           
           docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" -f ${AUTOTUNE_DOCKERFILE} .
           docker push "${IMAGE_NAME}:${IMAGE_TAG}"      
