@@ -64,7 +64,7 @@ jobs:
 
           # Update the script files to the latest version.
           cp clowdapp.yaml clowdapp.yaml.old
-          sed -e s/image: ${KRUIZE_IMAGE}:${KRUIZE_IMAGE_TAG}/image: ${IMAGE_NAME}:pr877/g clowdapp.yaml.old > clowdapp.yaml
+          sed -e "s/image: ${KRUIZE_IMAGE}:${KRUIZE_IMAGE_TAG}/image: ${IMAGE_NAME}:pr877/g" clowdapp.yaml.old > clowdapp.yaml
           
           # Commit the changes and push the feature branch to origin
           git add .
