@@ -57,7 +57,7 @@ jobs:
           git checkout -b $BRANCH_NAME
 
           # Update the script files to the latest version.
-          sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" > kruize-clowdapp.yaml
+          sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" kruize-clowdapp.yaml
           
           # Commit the changes and push the feature branch to origin
           git add .
