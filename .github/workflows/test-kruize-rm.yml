@@ -1,0 +1,81 @@
+name: Test latest Kruize rm image
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+     
+      - name: Build kruize image and push to quay
+        run: |
+          IMAGE_NAME="quay.io/chandra25ms/autotune"
+          AUTOTUNE_DOCKERFILE="Dockerfile.autotune"
+          
+          AUTOTUNE_GIT_BRANCH="remote_monitoring"
+          
+          git clone --branch $AUTOTUNE_GIT_BRANCH https://github.com/kruize/autotune.git
+
+          cd autotune
+          IMAGE_TAG=$(git rev-parse --short=7 HEAD)
+          docker login -u "${{ secrets.DOCKER_USER }}" -p "${{ secrets.DOCKER_PASSWORD }}" quay.io
+          
+          
+          docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" -f ${AUTOTUNE_DOCKERFILE} .
+          docker push "${IMAGE_NAME}:${IMAGE_TAG}"          
+
+      - name: Create pull request in ros-ocp-backend
+        run: |
+        
+          echo "IMAGE TAG = $IMAGE_TAG  IMAGE_NAME = $IMAGE_NAME"
+          IMAGE_NAME="quay.io/chandra25ms/autotune"
+          IMAGE_TAG="190a6cc"
+         
+          LATEST_TAG=$(git describe --tags --always --abbrev=0)
+          REPOSITORY="chandrams/demo2"
+          FOLDER="bin/$REPOSITORY"
+          BRANCH_NAME="chore-update-scripts-to-$LATEST_TAG"
+
+          # Clone the remote repository and change working directory to the
+          # folder it was cloned to.
+          git clone \
+            --depth=1 \
+            --branch=main \
+            https://chandrams:${{ secrets.MYTOKEN }}@github.com/$REPOSITORY \
+            $FOLDER
+
+          cd $FOLDER
+
+          # Setup the committers identity.
+          git config user.email "csubrama@redhat.com"
+          git config user.name "Chandrakala Subramanyam"
+
+          # Create a new feature branch for the changes.
+          git checkout -b $BRANCH_NAME
+
+          # Update the script files to the latest version.
+          sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" > clowdapp.yaml
+          
+          # Commit the changes and push the feature branch to origin
+          git add .
+          git commit -m "chore: Update kruize image and tag to latest on remote monitoring branch"
+          git push origin $BRANCH_NAME
+
+          # Store the PAT in a file that can be accessed by the
+          # GitHub CLI.
+          echo "${{ secrets.MYTOKEN }}" > token.txt
+
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          echo "Authorize github CLI"
+          gh auth login --with-token < token.txt
+          gh pr create \
+            --body "" \
+            --title "chore: Test latest kruize rm image" \
+            --head "$BRANCH_NAME" \
+            --base "main"
+            
+          
+     
