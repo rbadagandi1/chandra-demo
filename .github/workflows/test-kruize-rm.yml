@@ -1,4 +1,5 @@
 name: Test latest Kruize rm image
+
 on:
   workflow_dispatch:
 
