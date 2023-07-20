@@ -44,7 +44,7 @@ jobs:
           git clone \
             --depth=1 \
             --branch=main \
-            https://chandrams:${{ secrets.MYTOKEN }}@github.com/$REPOSITORY \
+            https://chandrams:${{ secrets.GITHUB_TOKEN }}@github.com/$REPOSITORY \
             $FOLDER
 
           cd $FOLDER
@@ -66,7 +66,7 @@ jobs:
 
           # Store the PAT in a file that can be accessed by the
           # GitHub CLI.
-          echo "${{ secrets.MYTOKEN }}" > token.txt
+          echo "${{ secrets.GITHUB_TOKEN }}" > token.txt
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
