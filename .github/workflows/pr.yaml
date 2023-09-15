@@ -115,7 +115,7 @@ jobs:
       - name: Capture ffdc logs
         if: always()
         run: |
-          ./scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
+          ./autotune/scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
       - name: Archive results
         if: always()
         run: |
