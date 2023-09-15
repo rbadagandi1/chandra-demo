@@ -1,4 +1,4 @@
-name: Latest Test on Pull Request 
+name: Test on Pull Request
 
 # Controls when the action will run. 
 on:
@@ -21,10 +21,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        with:
-         repository: kruize/autotune
-         ref: mvp_demo
-         path: autotune
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -33,7 +29,6 @@ jobs:
       - name: Build autotune
         run: |
           echo Build autotune
-          cd autotune
           ./build.sh -i autotune_operator:test
           docker images | grep autotune     
       - name: Check cluster info on minikube
@@ -43,35 +38,35 @@ jobs:
       - name: Install Prometheus on minikube
         run: |
           echo Install Prometheus on minikube
-          cd autotune/scripts
+          cd scripts
           ./prometheus_on_minikube.sh -as
-      - name: Deploy autotune
+      - name: Deploy kruize in experiment mode
         run: |
-          echo Deploy autotune
-          cd autotune
+          echo Deploy kruize in experiment mode
           cp ./manifests/autotune/autotune-operator-deployment.yaml_template ./manifests/autotune/autotune-operator-deployment.yaml_template.old
           sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/autotune/autotune-operator-deployment.yaml_template.old > ./manifests/autotune/autotune-operator-deployment.yaml_template
           echo "***************************************************************"
           cat ./manifests/autotune/autotune-operator-deployment.yaml_template
-          echo "***************************************************************"          
+          echo "***************************************************************"
           ./deploy.sh -c minikube -i autotune_operator:test
           sleep 20
-          autotune_pod=$(kubectl get pod -n monitoring | grep autotune | cut -d " " -f1)
-          echo "Autotune pod = $autotune_pod"
-          kubectl logs $autotune_pod -n monitoring -c autotune > ${GITHUB_WORKSPACE}/kruize_pod_log.txt 2>&1
+      - name: Capture ffdc logs
+        if: always()
+        run: |
+          ./scripts/ffdc.sh -d ${GITHUB_WORKSPACE}
       - name: Archive results
         if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
-          tar cvf autotune_results.tar kruize_pod_log.txt
+          tar cvf autotune_results.tar kruize_*log.txt
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v3
         with:
-           name: autotune-results
-           path: ./autotune_results.tar
-           retention-days: 2
+          name: autotune-results
+          path: ./autotune_results.tar
+          retention-days: 2
 
 
   build_crc:
@@ -81,10 +76,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        with:
-         repository: kruize/autotune
-         ref: mvp_demo
-         path: autotune
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
         with:
@@ -93,7 +84,6 @@ jobs:
       - name: Build crc
         run: |
           echo Build crc
-          cd autotune
           ./build.sh -i autotune_operator:test
           docker images | grep autotune
       - name: Check cluster info on minikube
@@ -103,32 +93,32 @@ jobs:
       - name: Install Prometheus on minikube
         run: |
           echo Install Prometheus on minikube
-          cd autotune/scripts
+          cd scripts
           ./prometheus_on_minikube.sh -as
-      - name: Deploy crc
+      - name: Deploy Kruize in crc mode
         run: |
-          echo Deploy crc
+          echo Deploy kruize in crc mode
           echo "***************************************************************"
-          cd autotune
-          cp ./manifests/crc/kruize-crc-minikube.yaml ./manifests/crc/kruize-crc-minikube.yaml.old
-          sed -e "s/image: \"kruize\/autotune_operator:0.0.8_mvp\"/image: \"autotune_operator:test\"/g" ./manifests/crc/kruize-crc-minikube.yaml.old > ./manifests/crc/kruize-crc-minikube.yaml
-          sed -i "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/crc/kruize-crc-minikube.yaml
-          cat ./manifests/crc/kruize-crc-minikube.yaml
-          kubectl apply -f ./manifests/crc/kruize-crc-minikube.yaml
-          sleep 120
-          autotune_pod=$(kubectl get pod -n monitoring | grep kruize | cut -d " " -f1)
-          echo "Autotune pod = $autotune_pod"
-          kubectl logs $autotune_pod -n monitoring > ${GITHUB_WORKSPACE}/kruize_pod_log.txt 2>&1
+          cp ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old
+          sed -e "s/imagePullPolicy: Always/imagePullPolicy: IfNotPresent/g" ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml.old > ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
+          cat ./manifests/crc/default-db-included-installation/minikube/kruize-crc-minikube.yaml
+
+          cd tests
+          ./test_autotune.sh -c minikube -i autotune_operator:test --testsuite=remote_monitoring_tests --testcase=test_e2e --resultsdir=${GITHUB_WORKSPACE}
+      - name: Capture ffdc logs
+        if: always()
+        run: |
+          ./scripts/ffdc.sh -m crc -d ${GITHUB_WORKSPACE}/kruize_test_results
       - name: Archive results
         if: always()
         run: |
           cd ${GITHUB_WORKSPACE}
-          tar cvf crc_results.tar kruize_pod_log.txt
+          tar cvf crc_results.tar kruize_test_results
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v3
         with:
-           name: crc-results
-           path: ./crc_results.tar
-           retention-days: 2
+          name: crc-results
+          path: ./crc_results.tar
+          retention-days: 2
