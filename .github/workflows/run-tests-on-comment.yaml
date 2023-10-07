@@ -6,15 +6,19 @@ on:
     issue_type: [pull_request]
   pull_request_review:
     types: [submitted]
-
+env:
+  ACTIONS_STEP_DEBUG: true
+  
 jobs:
   functest:
 
     # Only run this if the user asked us to
-    if: github.event.comment.body == 'run functional tests'
+    if: contains(github.event.comment.body, 'run functional tests')
 
     runs-on: ubuntu-20.04
     steps:
+      - name: Debug Comment Content
+        run: echo "Comment :${{ github.event.comment.body }}"
     
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.0
