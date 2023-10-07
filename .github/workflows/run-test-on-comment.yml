@@ -1,0 +1,72 @@
+name: Run tests on comment
+
+on:
+  issue_comment:
+    types: [created]
+    issue_type: [pull_request]
+  pull_request_review:
+    types: [submitted]
+env:
+  ACTIONS_STEP_DEBUG: true
+  
+jobs:
+  functest:
+
+    # Only run this if the user asked us to
+    if: contains(github.event.comment.body, 'run functional tests')
+
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get PR branch
+        uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+        
+      - name: Debug Comment Content
+        run: echo "Comment :${{ github.event.comment.body }}"
+
+      - name: Set latest commit status as pending
+        uses: myrotvorets/set-commit-status-action@master
+        with:
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: pending
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+    
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: 'v1.16.0'
+          kubernetes version: 'v1.19.2'
+      - uses: actions/checkout@v3
+        with:
+          repository: kruize/autotune
+          path: autotune
+          ref: mvp_demo
+      
+      - name: Run Kruize remote monitoring tests on minikube
+        run: |
+          ps -ef | grep python
+          echo Running Kruize remote monitoring testsuite on minikube
+          cd autotune
+          cd tests         
+          ./test_autotune.sh -c minikube -i kruize/autotune_operator:0.0.15_mvp --testsuite=remote_monitoring_tests --testcase=negative --resultsdir=${GITHUB_WORKSPACE}
+          
+      - name: Archive results
+        if: always()
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ls
+          tar cvf kruize_test_results.tar kruize_test_results
+          ls
+          
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+           name: kruize_test_results
+           path: ./kruize_test_results.tar
+           retention-days: 2
