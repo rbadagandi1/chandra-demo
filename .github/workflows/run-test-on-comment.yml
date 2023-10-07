@@ -4,6 +4,7 @@ on:
   issue_comment:
     types: [created]
     issue_type: [pull_request]
+    branch: main
   pull_request_review:
     types: [submitted]
 env:
