@@ -46,7 +46,7 @@ jobs:
         run: |
           ps -ef | grep python
           echo Running Kruize remote monitoring fault tolerant testsuite on minikube
-          cd autotune-fault
+          cd autotune
           cd tests/scripts/remote_monitoring_tests/fault_tolerant_tests         
           ./remote_monitoring_fault_tolerant_tests.sh -c minikube -i ${{ github.event.inputs.image }}  -r  ${GITHUB_WORKSPACE}
           
