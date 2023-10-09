@@ -55,7 +55,7 @@ jobs:
         run: |
           cd ${GITHUB_WORKSPACE}
           ls
-          tar cvf kruize_test_results.tar kruize_test_results
+          tar cvf kruize_test_results.tar kruize_test_results remote-monitoring*
           ls
           
       - name: Upload results
