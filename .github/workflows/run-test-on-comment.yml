@@ -7,9 +7,7 @@ on:
     branch: main
   pull_request_review:
     types: [submitted]
-env:
-  ACTIONS_STEP_DEBUG: true
-  
+
 jobs:
   functest:
 
