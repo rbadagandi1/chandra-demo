@@ -29,7 +29,7 @@ jobs:
       - name: Debug Comment Content
         run: echo "Comment :${{ github.event.comment.body }}"
 
-     
+      # get-pr step by @Simran-B https://github.com/actions/checkout/issues/331#issuecomment-707103442
       - uses: actions/github-script@v3
         id: get-pr
         with:
