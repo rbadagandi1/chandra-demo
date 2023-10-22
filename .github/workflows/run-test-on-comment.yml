@@ -32,7 +32,6 @@ jobs:
         id: get-pr
         with:
           script: |
-            const github = require('@actions/github');
             const request = {
               owner: context.repo.owner,
               repo: context.repo.repo,
