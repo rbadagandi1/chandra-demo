@@ -28,22 +28,32 @@ jobs:
       - name: Debug Comment Content
         run: echo "Comment :${{ github.event.comment.body }}"
 
-      - name: Fetch Comment Data
-        run: |
-          comment_url="https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}"
-          comment_data=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comment_url")
-          echo "$comment_data"
-
+     
+      - uses: actions/github-script@v3
+        id: get-pr
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(request)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
       - name: Check out code
         uses: actions/checkout@v3
-           
+        with:
+          repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
+              
       - name: Run hello
         run: |
-          echo "PR_NUMBER=41" >> $GITHUB_ENV
-          echo "PR_NUMBER = ${{ env.PR_NUMBER }}"
-          echo "PR_NUMBER = ${{ github.event.issue.pull_request.number }}"
-          git fetch origin pull/41/head:pr_41
-          git checkout pr_41
+         
           cat Hello.java
           javac Hello.java
           java Hello
