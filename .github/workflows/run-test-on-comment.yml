@@ -23,7 +23,8 @@ jobs:
         run: |
           echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
           echo "id=$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-         
+          echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo "id=$GITHUB_RUN_ID"
         id: workflow_run_info
         
       - name: Debug Comment Content
