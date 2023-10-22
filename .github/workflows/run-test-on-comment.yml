@@ -23,15 +23,19 @@ jobs:
           echo ::set-output name=url::$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
           echo ::set-output name=id::$GITHUB_RUN_ID
         id: workflow_run_info
+        
+      - name: Debug Comment Content
+        run: echo "Comment :${{ github.event.comment.body }}"
+
       - name: Get PR branch
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
         id: get-pr
         with:
           script: |
             const request = {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: context.issue.number
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
             }
             core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
             try {
@@ -41,9 +45,7 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
         
-      - name: Debug Comment Content
-        run: echo "Comment :${{ github.event.comment.body }}"
-
+      
       - name: Checkout PR branch
         uses: actions/checkout@v3
         with:
