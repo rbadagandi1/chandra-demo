@@ -66,7 +66,7 @@ jobs:
     if: failure()
     steps:
     - name: Create comment
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -74,7 +74,7 @@ jobs:
           @${{ github.actor }} Build(s) failed.
           Workflow Run ID: [${{ needs.functest.outputs.workflow_id }}](${{ needs.functest.outputs.workflow_url }})
           `;
-          github.issues.createComment({
+          github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -87,7 +87,7 @@ jobs:
     if: cancelled()
     steps:
     - name: Create comment
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -95,7 +95,7 @@ jobs:
           @${{ github.actor }} Build(s) cancelled.
           Workflow Run ID: [${{ needs.functest.outputs.workflow_id }}](${{ needs.functest.outputs.workflow_url }})
           `;
-          github.issues.createComment({
+          github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -108,7 +108,7 @@ jobs:
     if: success()
     steps:
     - name: Create comment
-      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
