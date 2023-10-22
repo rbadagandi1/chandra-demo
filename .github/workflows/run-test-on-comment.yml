@@ -21,8 +21,9 @@ jobs:
     steps:
       - name: Get workflow run info
         run: |
-          echo ::set-output name=url::$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
-          echo ::set-output name=id::$GITHUB_RUN_ID
+          echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+          echo "id::$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+         
         id: workflow_run_info
         
       - name: Debug Comment Content
