@@ -30,6 +30,12 @@ jobs:
       - name: Debug Comment Content
         run: echo "Comment :${{ github.event.comment.body }}"
 
+      - name: Fetch Comment Data
+        run: |
+          comment_url="https://api.github.com/repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}"
+          comment_data=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$comment_url")
+          echo "$comment_data"
+
       - name: Check out code
         uses: actions/checkout@v3
            
