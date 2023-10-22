@@ -112,6 +112,8 @@ jobs:
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
+          const github = require('@actions/github');
+          const context = github.context;
           comment_body = `
           @${{ github.actor }} Build(s) successful.
           Workflow Run ID: [${{ needs.functest.outputs.workflow_id }}](${{ needs.functest.outputs.workflow_url }})
