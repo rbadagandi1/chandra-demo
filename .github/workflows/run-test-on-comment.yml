@@ -8,11 +8,10 @@ on:
   pull_request_review:
     types: [submitted]
 
-env:
-  PR_NUMBER: ${{ github.event.number }}
-  
 jobs:
   functest:
+    env:
+      PR_NUMBER: ${{ github.event.issue.pull_request.number }}
 
     # Only run this if the user asked us to
     if: contains(github.event.comment.body, 'run functional tests')
