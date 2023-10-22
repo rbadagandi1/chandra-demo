@@ -4,7 +4,7 @@ on:
   issue_comment:
     types: [created]
     issue_type: [pull_request]
-    branch: main
+    branch: [main, demo, test_branch]
   pull_request_review:
     types: [submitted]
 
@@ -43,13 +43,6 @@ jobs:
         
       - name: Debug Comment Content
         run: echo "Comment :${{ github.event.comment.body }}"
-
-      - name: Set latest commit status as pending
-        uses: myrotvorets/set-commit-status-action@master
-        with:
-          sha: ${{ steps.comment-branch.outputs.result.head_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: pending
 
       - name: Checkout PR branch
         uses: actions/checkout@v3
