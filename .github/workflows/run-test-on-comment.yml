@@ -35,7 +35,7 @@ jobs:
            
       - name: Run hello
         run: |
-          cd autotune
+        
           git fetch origin pull/${{env.PR_NUMBER}}/head:pr_${{env.PR_NUMBER}}
           git checkout pr_${{env.PR_NUMBER}}
           cat Hello.java
