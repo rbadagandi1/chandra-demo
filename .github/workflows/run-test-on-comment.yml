@@ -118,7 +118,7 @@ jobs:
           @${{ github.actor }} Build(s) successful.
           Workflow Run ID: [${{ needs.functest.outputs.workflow_id }}](${{ needs.functest.outputs.workflow_url }})
           `;
-          github.issues.createComment({
+          github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
