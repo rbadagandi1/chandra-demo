@@ -22,7 +22,7 @@ jobs:
       - name: Get workflow run info
         run: |
           echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-          echo "id::$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+          echo "id=$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
          
         id: workflow_run_info
         
