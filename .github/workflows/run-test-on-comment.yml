@@ -42,8 +42,8 @@ jobs:
           echo "PR_NUMBER=41" >> $GITHUB_ENV
           echo "PR_NUMBER = ${{ env.PR_NUMBER }}"
           echo "PR_NUMBER = ${{ github.event.issue.pull_request.number }}"
-          git fetch origin pull/${{ env.PR_NUMBER }}/head:pr_${{ env.PR_NUMBER }}
-          git checkout pr_${{ env.PR_NUMBER }}
+          git fetch origin pull/41/head:pr_41
+          git checkout pr_41
           cat Hello.java
           javac Hello.java
           java Hello
