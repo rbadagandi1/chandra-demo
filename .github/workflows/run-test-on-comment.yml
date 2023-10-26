@@ -54,7 +54,7 @@ jobs:
               
       - name: Run hello
         run: |
-         
+          git branch
           cat Hello.java
           javac Hello.java
           java Hello
