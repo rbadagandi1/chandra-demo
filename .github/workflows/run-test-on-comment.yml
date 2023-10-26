@@ -30,7 +30,7 @@ jobs:
         run: echo "Comment :${{ github.event.comment.body }}"
 
      
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v6
         id: get-pr
         with:
           script: |
