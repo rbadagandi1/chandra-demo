@@ -27,7 +27,9 @@ jobs:
         run: echo "PR_NUMBER=$(curl -s -H \"Authorization:\ Bearer ${{ secrets.GITHUB_TOKEN }}\" https://api.github.com/repos/${{ github.repository }}/pulls | jq '.[0].number')" >> "$GITHUB_ENV"
 
       - name: Display Pull Request Number
-        run: echo "Pull Request Number:${{ env.PR_NUMBER }}"
+        run: |
+          echo "Pull Request Number:${{ env.PR_NUMBER }}"
+          echo "Pull Request Number:${{ env.PULL_REQUEST_NUMBER }}"
 
 
       - name: Comment PR
@@ -35,4 +37,4 @@ jobs:
         with:
           message: |
             /retest
-          pr_number: ${{ env.PR_NUMBER }}
+          pr_number: ${{ env.PULL_REQUEST_NUMBER }}
