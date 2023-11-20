@@ -1,6 +1,6 @@
 name: Comment on PR
 on:
-  workflow_call:  
+  workflow_dispatch:
    
 jobs:
   comment_pr:
