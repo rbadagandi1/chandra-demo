@@ -15,5 +15,9 @@ jobs:
       with:
         message: |
           /retest
-        pr_number: 43
+        pr_number: 45
+
+    - name: Comment using gh
+      run: | 
+        gh pr comment 45 --body "/retest - gh"
  
