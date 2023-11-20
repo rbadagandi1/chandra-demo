@@ -10,7 +10,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      - name: Update Hello
+        run: |
+          sed -i 's/chandra/Chandu/g' Hello.java > Hello.java
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v5
