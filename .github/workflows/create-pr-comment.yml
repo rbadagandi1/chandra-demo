@@ -28,3 +28,11 @@ jobs:
 
       - name: Display Pull Request Number
         run: echo "Pull Request Number:${{ env.PR_NUMBER }}"
+
+
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            /retest
+          pr_number: ${{ env.PR_NUMBER }}
