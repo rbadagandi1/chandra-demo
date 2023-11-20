@@ -10,16 +10,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Comment PR
-      uses: thollander/actions-comment-pull-request@v2
-      with:
-        message: |
-          /retest
-        pr_number: 45
-
     - name: Comment using gh     
       run: | 
         gh pr comment 45 --body "/retest - gh"
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
  
