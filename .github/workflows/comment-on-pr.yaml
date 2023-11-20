@@ -17,7 +17,9 @@ jobs:
           /retest
         pr_number: 45
 
-    - name: Comment using gh
+    - name: Comment using gh     
       run: | 
         gh pr comment 45 --body "/retest - gh"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
