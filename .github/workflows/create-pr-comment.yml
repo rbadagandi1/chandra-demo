@@ -22,7 +22,7 @@ jobs:
 
       - name: Get Pull Request Number
         id: pr_number
-        run: echo "::set-output name=pr_number::$(curl -s -H \"Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}\" https://api.github.com/repos/${{ github.repository }}/pulls | jq '.[0].number')"
+        run: echo "::set-output name=pr_number::$(curl -s -H \"Authorization:\ Bearer ${{ secrets.GITHUB_TOKEN }}\" https://api.github.com/repos/${{ github.repository }}/pulls | jq '.[0].number')"
 
       - name: Display Pull Request Number
-        run: echo "Pull Request Number: ${{ steps.pr_number.outputs.pr_number }}"
+        run: echo "Pull Request Number:${{ steps.pr_number.outputs.pr_number }}"
