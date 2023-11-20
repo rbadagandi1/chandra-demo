@@ -12,7 +12,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Update Hello
         run: |
+          git checkout -b update_hello
           sed -i 's/chandra/Chandu/g' Hello.java > Hello.java
+          
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v5
@@ -21,6 +23,8 @@ jobs:
           title: "Automated Pull Request"
           labels: "automated"
           body: "This is an automated pull request."
+          branch: update_hello
+          base: main
 
       - name: Get Pull Request Number
         id: pr_number
