@@ -48,6 +48,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+         repo: kruize
+         branch: mvp_demo
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
