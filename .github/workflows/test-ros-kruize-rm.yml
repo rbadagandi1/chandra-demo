@@ -49,6 +49,7 @@ jobs:
           echo "current_tag = $current_tag"
           echo "new_tag = $new_tag"
 
+          new_tag = "c84bd63"
           sed -i "s/$current_tag/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
           cat ./ros-ocp-backend/kruize-clowdapp.yaml
 
@@ -76,8 +77,8 @@ jobs:
         if: steps.compare_files.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ steps.generate-token.outputs.token }}
-          title: '[Do not merge] - EE Dry Run with latest Kruize RM image'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: '[Do not merge] - EE Dry Run with latest Kruize RM image - PR from another repo'
           base: main
 
       - name: Display Pull Request Number
