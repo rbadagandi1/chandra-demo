@@ -49,7 +49,7 @@ jobs:
           echo "current_tag = $current_tag"
           echo "new_tag = $new_tag"
 
-          new_tag = "c84bd63"
+          new_tag="c84bd63"
           sed -i "s/$current_tag/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
           cat ./ros-ocp-backend/kruize-clowdapp.yaml
 
