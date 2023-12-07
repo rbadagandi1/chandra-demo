@@ -1,8 +1,6 @@
 name: EE Dry Run - Latest Kruize image - app token
 
 on:
-  schedule:
-    - cron: "5 0 * * *"
   workflow_dispatch:
 
 jobs:
