@@ -15,8 +15,9 @@ jobs:
           
           sed -i "s/chandra/Chandrakala/g" ./Hello.java
           cat ./Hello.java
-          git status
-
+                   
+          git config --global user.email "chandrams@gmail.com"
+          git config --global user.name "chandrams"
           git add Hello.java
           git commit -m "Updated Hello.java"
      
