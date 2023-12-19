@@ -12,7 +12,7 @@ jobs:
     
       - name: Update the file
         run: |
-          cd demo
+          
           sed -i "s/chandra/Chandrakala/g" ./Hello.java
           cat ./Hello.java
           git status
