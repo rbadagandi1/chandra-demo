@@ -15,4 +15,6 @@ jobs:
           skopeo inspect "docker://registry.access.redhat.com/ubi8/ubi-minimal:8.8" | grep -Po '(?<="Digest": ")([^"]+)' > digest
           docker run --rm --entrypoint sh -u 0 kruize/autotune_operator:0.0.20.3_mvp -c \
             'rpm -qa | sort | sha256sum' >> digest
+          echo "**************************************"
           cat digest
+          echo "**************************************"
